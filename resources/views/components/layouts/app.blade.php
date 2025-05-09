@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body class="h-full text-black bg-white dark:bg-gray-700 dark:text-white">
@@ -29,19 +30,24 @@
                                 src="https://www.presentations.gov.in/wp-content/uploads/2020/06/ICONIC_SQUARE_NIC_Logo_blue-01.png"
                                 alt="Your Company">
                         </div>
-                        <div class="hidden md:block">
+                        <div class="hidden md:block ">
                             <div class="flex items-baseline ml-10 space-x-4">
                                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
 
                                 <x-navigate href="/">home</x-navigate>
                                 <x-navigate href="/about">about</x-navigate>
-                                <x-navigate href="/create">create</x-navigate>
 
                             </div>
+
                         </div>
                     </div>
                     <div class="hidden md:block">
+
                         <div class="flex items-center ml-4 md:ml-6">
+                            <div class="">
+                                <x-navigate href="/login">login</x-navigate>
+
+                            </div>
                             <button type="button"
                                 class="relative p-1 text-gray-400 bg-gray-800 rounded-full hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                                 <span class="absolute -inset-1.5"></span>
@@ -90,11 +96,11 @@
 
         <main>
             <div class="h-full px-4 py-6 mx-4">
+                {{-- <livewire:home /> --}}
                 {{ $slot }}
             </div>
         </main>
     </div>
-
 </body>
 
 </html>
