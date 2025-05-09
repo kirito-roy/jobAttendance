@@ -10,7 +10,7 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(user $user): bool
     {
         return false;
     }
@@ -18,7 +18,7 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, user $model): bool
+    public function view(user $user, user $model): bool
     {
         return false;
     }
