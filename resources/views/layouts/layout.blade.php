@@ -16,11 +16,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="h-full text-black bg-white dark:bg-gray-700 dark:text-white">
+<body class="h-full">
 
 
-    <div class="h-full bg-white dark:bg-gray-700">
-        <nav class="bg-gray-800 w-svw">
+    <div class="min-h-full">
+        <nav class="bg-gray-800">
             <div class="w-full px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center">
@@ -89,7 +89,7 @@
 
 
         <main>
-            <div class="h-full px-4 py-6 mx-4">
+            <div class="px-4 py-6 mx-4 ">
                 {{ $slot }}
             </div>
         </main>

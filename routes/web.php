@@ -6,7 +6,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view(view: 'frontEnd.home');
 });
-
+Route::get('/about', function () {
+    return view(view: 'frontEnd.about');
+});
+Route::get('/login', function () {
+    return view(view: 'auth.login');
+});
+Route::post('/login', function () {
+    return view(view: 'auth.login');
+});
+Route::get('/register', function () {
+    return view(view: 'auth.register');
+});
+Route::post('/register', function () {
+    return view(view: 'auth.register');
+});
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
