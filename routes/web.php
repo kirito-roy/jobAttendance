@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Home;
 use App\Livewire\About;
@@ -8,6 +9,8 @@ use App\Livewire; // Import the Home controller
 use App\Livewire\Setting;
 use Illuminate\Support\Facades\Route;
 use Termwind\Components\Li;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::get(
     '/',
@@ -23,18 +26,15 @@ Route::get('/attendance', Livewire\Attendance::class);
 Route::get('/report', Livewire\Report::class);
 Route::get('/profile', Livewire\Profile::class);
 
-Route::get('/login', function () {
-    return view(view: 'auth.login');
-});
-Route::post('/login', function () {
-    return view(view: 'auth.login');
-});
-Route::get('/register', function () {
-    return view(view: 'auth.register');
-});
-Route::post('/register', function () {
-    return view(view: 'auth.register');
-});
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
+Route::get('/register', [RegisteredUserController::class, 'create'])
+    ->name('register');
+
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
 
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('role')->default('user');
             $table->string('dep')->nullable();
+            $table->rememberToken(); // <-- Add this line
             $table->timestamps();
         });
     }

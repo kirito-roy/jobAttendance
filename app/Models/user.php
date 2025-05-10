@@ -20,5 +20,6 @@ class user extends Authenticatable
         'phone',
         'address',
         'dep',
+        'remember_token', // <-- optional
     ];
 }
