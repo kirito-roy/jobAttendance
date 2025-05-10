@@ -1,7 +1,11 @@
-<div>
-    <x-secondary-button>Click Me</x-secondary-button><br />
-    <x-text-input></x-text-input><br />
+<div class="h-full ">
+    <x-slot:heading>home</x-slot:heading>
+    <div class="flex flex-row justify-center text-center gap-28 h-28">
 
-    {{ $s }}
-    <div>suit</div>
+
+    </div>
+
+
+
+
 </div>

@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use app\Models\user;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -22,13 +23,21 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
+        // $a = user::query();
+        // $request = $a->where('email', $request->email)->first();
 
         $request->session()->regenerate();
+        if (Auth::user()->role == 'admin') {
+            return redirect('/admin');
+        } else if (Auth::user()->role == 'user') {
+            return redirect("/");
+        }
 
-        return redirect("/");
+        // Default return statement
+        // return redirect('/login');
     }
 
     /**

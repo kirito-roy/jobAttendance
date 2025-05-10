@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->foreignId('user_id');
             $table->timestamp('check_in')->nullable();
             $table->timestamp('check_out')->nullable();
-            $table->enum('status', ['Present', 'Late', 'Absent'])->default('Present');
+            $table->enum('status', ['present', 'late', 'absent'])->default('present');
             $table->timestamps();
         });
     }

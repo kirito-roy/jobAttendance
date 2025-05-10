@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ strtoupper($heading) }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
 
-<body class="h-full text-black bg-white dark:bg-gray-700 dark:text-white">
+<body class="h-full antialiased text-black bg-gray-300 dark:text-white dark:bg-gray-700">
 
 
-    <div class="h-full bg-white dark:bg-gray-700">
-        <nav class="bg-gray-800 w-svw">
+    <div class="flex flex-col h-full">
+        <nav class="bg-gray-800 w-svw ">
             <div class="w-full px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center">
@@ -33,11 +34,15 @@
                         <div class="hidden md:block ">
                             <div class="flex items-baseline ml-10 space-x-4">
                                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-
-                                <x-navigate href="/">home</x-navigate>
+                                @if (Auth::user()->role == 'user')
+                                    <x-navigate href="/">home</x-navigate>
+                                @elseif (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
+                                    <x-navigate href="/admin">Admin Panel</x-navigate>
+                                @endif
                                 <x-navigate href="/profile">profile</x-navigate>
-                                <x-navigate href="/setting">setting</x-navigate>
-                                <x-navigate href="/schedules">schedules</x-navigate>
+                                <x-navigate href="/attendance">attendance</x-navigate>
+
+
                                 <x-navigate href="/report">report</x-navigate>
                                 <x-navigate href="/about">about</x-navigate>
 
@@ -110,12 +115,12 @@
         </nav>
 
 
-        <main>
-            <div class="h-full px-4 py-6 mx-4">
-                {{-- <livewire:home /> --}}
-                {{ $slot }}
-            </div>
-        </main>
+
+        <div class="flex-1 h-full px-4 py-6 mx-4 overflow-auto">
+            {{-- <livewire:home /> --}}
+            {{ $slot }}
+        </div>
+
     </div>
 </body>
 

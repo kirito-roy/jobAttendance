@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers;
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Home;
 use App\Livewire\About;
 use App\Livewire\Admin;
 use App\Livewire; // Import the Home controller
+use App\Livewire\Attendance;
 use App\Livewire\Setting;
 use Illuminate\Support\Facades\Route;
 use Termwind\Components\Li;
@@ -16,15 +17,6 @@ Route::get(
     '/',
     Home::class
 );
-Route::get('/about', About::class);
-
-Route::get('/setting', Setting::class);
-Route::get('/admin', Admin::class);
-Route::get('/schedules', Livewire\Schedule::class);
-Route::get('/notification', Livewire\Notification::class);
-Route::get('/attendance', Livewire\Attendance::class);
-Route::get('/report', Livewire\Report::class);
-Route::get('/profile', Livewire\Profile::class);
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->name('login');
@@ -35,6 +27,18 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
     ->name('register');
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/about', About::class);
+
+    Route::get('/setting', Setting::class);
+    Route::get('/admin', Admin::class);
+    Route::get('/schedules', Livewire\Schedule::class);
+    Route::get('/notification', Livewire\Notification::class);
+    Route::get('/attendance', Livewire\Attendance::class);
+    Route::post('/attendance', [Controllers\attendance_form::class, 'store']);
+    Route::get('/report', Livewire\Report::class);
+    Route::get('/profile', Livewire\Profile::class);
+});
 
 
 

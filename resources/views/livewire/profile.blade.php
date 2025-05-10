@@ -1,4 +1,4 @@
 <div>
-    <x-slot:heading>attandance</x-slot:heading>
+    <x-slot:heading>Profile</x-slot:heading>
     profile
 </div>
