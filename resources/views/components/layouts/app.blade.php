@@ -36,11 +36,13 @@
                                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                                 @if (Auth::user()->role == 'user')
                                     <x-navigate href="/">home</x-navigate>
+                                    <x-navigate href="/attendance">attendance</x-navigate>
                                 @elseif (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
                                     <x-navigate href="/admin">Admin Panel</x-navigate>
+                                    <x-navigate href="/role">Roles</x-navigate>
                                 @endif
                                 <x-navigate href="/profile">profile</x-navigate>
-                                <x-navigate href="/attendance">attendance</x-navigate>
+
 
 
                                 <x-navigate href="/report">report</x-navigate>

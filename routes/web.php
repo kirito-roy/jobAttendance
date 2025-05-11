@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Termwind\Components\Li;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Livewire\Role;
 
 Route::get(
     '/',
@@ -38,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/attendance', [Controllers\attendance_form::class, 'store']);
     Route::get('/report', Livewire\Report::class);
     Route::get('/profile', Livewire\Profile::class);
+    Route::get('/role', Livewire\Role::class); // Commented out until the Role class is defined
 });
 
 
