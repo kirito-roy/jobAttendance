@@ -13,10 +13,13 @@ class Home extends Component
     {
         if (!Auth::check()) {
             return redirect('/login'); // ✅ Safe to redirect in mount()
+        } else if (Auth::user()->role == 'admin') {
+            return redirect("/admin");
         }
     }
     public function render()
     {
+
         return view('livewire.home', ['s' => $this->s]);
     }
 }

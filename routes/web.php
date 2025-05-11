@@ -14,6 +14,11 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Livewire\Role;
 
+// Middleware configuration for role-based access
+Route::aliasMiddleware('role', \App\Http\Middleware\RoleMiddleware::class);
+
+// Middleware groups should be defined in the HTTP Kernel or middleware classes, not in the routes file.
+
 Route::get(
     '/',
     Home::class
@@ -28,30 +33,31 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
     ->name('register');
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
+
 Route::middleware(['auth'])->group(function () {
+    // Routes for everyone
     Route::get('/about', About::class);
-
-    Route::get('/setting', Setting::class);
-    Route::get('/admin', Admin::class);
-    Route::get('/schedules', Livewire\Schedule::class);
-    Route::get('/notification', Livewire\Notification::class);
-    Route::get('/attendance', Livewire\Attendance::class);
-    Route::post('/attendance', [Controllers\attendance_form::class, 'store']);
-    Route::get('/report', Livewire\Report::class);
     Route::get('/profile', Livewire\Profile::class);
-    Route::get('/role', Livewire\Role::class); // Commented out until the Role class is defined
+    Route::get('/notification', Livewire\Notification::class);
+
+    // Routes for admin only
+    Route::middleware(['role:admin|manager'])->group(function () {
+        Route::get('/admin', Admin::class);
+        Route::get('/role', Role::class);
+        Route::get('/schedule', Livewire\Schedule::class);
+        Route::get('/report', Livewire\Report::class);
+    });
+
+    // Routes for users only
+    Route::middleware(['role:user'])->group(function () {
+        Route::get('/attendance', Livewire\Attendance::class);
+        Route::post('/attendance', [Controllers\attendance_form::class, 'store']);
+        // Route::get('/setting', Setting::class);
+    });
+    // Route::middleware(['role:manager'])->group(function () {
+    //     Route::get('/admin', Admin::class);
+    //     Route::get('/role', Role::class);
+    //     Route::get('/schedules', Livewire\Schedule::class);
+    //     Route::get('/report', Livewire\Report::class);
+    // });
 });
-
-
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
-
-// require __DIR__.'/auth.php';
