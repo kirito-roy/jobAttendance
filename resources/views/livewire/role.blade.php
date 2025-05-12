@@ -19,6 +19,16 @@
                 </div>
             @endif
 
+            <!-- Search Filter -->
+            <div class="flex mb-4">
+                <input type="text" wire:model="search"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600"
+                    placeholder="Search by name or email">
+                <x-primary-button wire:click="searchf" class="ml-2">
+                    Search
+                </x-primary-button>
+            </div>
+
             <table class="w-full text-sm text-left border-collapse table-auto">
                 <thead>
                     <tr class="bg-gray-100 dark:bg-gray-700">
@@ -30,32 +40,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @forelse ($users as $user)
                         <tr class="hover:bg-gray-200 dark:hover:bg-gray-600">
                             <td class="px-4 py-2 border">{{ $user->name }}</td>
-                            <td class="px-4 py-2 border">
-                                {{ $user->role ?? 'No role assigned' }}</td>
-                            <td class="px-4 py-2 border">
-                                {{ $user->dep ?? 'No dep assigned' }}</td>
+                            <td class="px-4 py-2 border">{{ $user->role ?? 'No role assigned' }}</td>
+                            <td class="px-4 py-2 border">{{ $user->dep ?? 'No dep assigned' }}</td>
 
                             <td class="px-4 py-2 border">
                                 <form wire:submit.prevent="submit_role({{ $user->id }})" class="flex flex-col">
+                                    <!-- Role Dropdown -->
                                     <select wire:model.defer="selectedRole.{{ $user->id }}" name="role_id"
                                         class="w-full px-3 py-2 mt-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
-                                        <option value="" class="dark:text-gray-400">Select Role</option>
+                                        <option value="">Select Role</option>
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role }}" class="dark:text-gray-400">
-                                                {{ ucfirst($role) }}</option>
+                                            <option value="{{ $role }}">{{ ucfirst($role) }}</option>
                                         @endforeach
                                     </select>
+
+                                    <!-- Department Dropdown -->
                                     <select wire:model.defer="selectedDep.{{ $user->id }}" name="dep"
                                         class="w-full px-3 py-2 mt-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
-                                        <option value="" class="dark:text-gray-400">Select Dep</option>
+                                        <option value="">Select Dep</option>
                                         @foreach ($deps as $dep)
-                                            <option value="{{ $dep }}" class="dark:text-gray-400">
-                                                {{ ucfirst($dep) }}</option>
+                                            <option value="{{ $dep }}">{{ ucfirst($dep) }}</option>
                                         @endforeach
                                     </select>
+
+                                    <!-- Change Button -->
                                     <button
                                         class="px-4 py-2 mt-2 text-sm font-semibold text-white transition duration-150 bg-indigo-600 rounded-md hover:bg-indigo-700">
                                         Change
@@ -70,7 +81,11 @@
                                 </button>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-4 py-2 text-center border">No users found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

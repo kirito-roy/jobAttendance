@@ -19,4 +19,9 @@ class User extends Authenticatable
         'dep',
         'remember_token',
     ];
+    // User.php
+    public function schedule()
+    {
+        return $this->hasOne(Schedule::class);
+    }
 }

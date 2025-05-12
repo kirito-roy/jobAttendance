@@ -29,13 +29,19 @@ class AuthenticatedSessionController extends Controller
         // $a = user::query();
         // $request = $a->where('email', $request->email)->first();
 
-        $request->session()->regenerate();
         if (Auth::user()->role == 'admin') {
+            $request->session()->regenerate();
             return redirect('/admin');
-        } else if (Auth::user()->role == 'user') {
+        } else if (Auth::user()->role == 'user' && Auth::user()->dep != null) {
+            $request->session()->regenerate();
+
             return redirect("/");
         } else if (Auth::user()->role == 'manager') {
+            $request->session()->regenerate();
+
             return redirect('/admin');
+        } else {
+            echo "account not apptoved, Admin must chose an depertment for you.";
         }
 
         // Default return statement
