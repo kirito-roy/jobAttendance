@@ -9,27 +9,40 @@ use App\Models\Schedule as ScheduleModel;
 
 class Schedule extends Component
 {
-    public $users;
+    public $allUsers = []; // Preload all users
+    public $users = []; // Filtered users
     public $startOfWeek;
     public $endOfWeek;
 
     // Individual user time inputs
     public $times = [];
+    public $search = ''; // Search term
 
     public function mount()
     {
         $today = new DateTime();
 
         // Calculate start and end of the week
-        $this->startOfWeek = (clone $today)->modify('last monday')->format('Y-m-d');
-        $this->endOfWeek = (clone $today)->modify('last sunday')->format('Y-m-d');
+        $this->startOfWeek = (clone $today)->modify('monday')->format('Y-m-d');
+        $this->endOfWeek = (clone $today)->modify('sunday')->format('Y-m-d');
 
-        // Fetch users and their schedules for the current week
-        $this->users = User::with(['schedule' => function ($query) {
+        // Preload all users with schedules
+        $this->allUsers = User::with(['schedule' => function ($query) {
             $query->where('startOfWeek', $this->startOfWeek);
-        }])->where('role', 'user')->get();
+        }])
+            ->where('role', 'user')
+            ->get();
 
-        // Initialize times array for each user
+        // Initialize the filtered user list and times
+        $this->users = $this->allUsers;
+        $this->initializeTimes();
+    }
+
+
+
+    private function initializeTimes()
+    {
+        $this->times = []; // Reset the times array
         foreach ($this->users as $user) {
             $this->times[$user->id] = [
                 'monday' => $user->schedule->monday ?? '',
@@ -44,16 +57,16 @@ class Schedule extends Component
     public function schedule_form($userId)
     {
         // Validate time inputs for the specific user
-        // $this->validate([
-        //     "times.$userId.monday" => 'date_format:H:i',
-        //     "times.$userId.tuesday" => 'date_format:H:i',
-        //     "times.$userId.wednesday" => 'date_format:H:i',
-        //     "times.$userId.thursday" => 'date_format:H:i',
-        //     "times.$userId.friday" => 'date_format:H:i',
-        // ]);
+        $this->validate([
+            "times.$userId.monday" => 'nullable|date_format:H:i',
+            "times.$userId.tuesday" => 'nullable|date_format:H:i',
+            "times.$userId.wednesday" => 'nullable|date_format:H:i',
+            "times.$userId.thursday" => 'nullable|date_format:H:i',
+            "times.$userId.friday" => 'nullable|date_format:H:i',
+        ]);
 
-        // Fetch the user
-        $user = User::find($userId);
+        // Find the user in the preloaded data
+        $user = collect($this->allUsers)->firstWhere('id', $userId);
 
         if ($user) {
             // Save or update the schedule
@@ -69,7 +82,7 @@ class Schedule extends Component
                 ]
             );
 
-            session()->flash('success', "Schedule saved for {$user->name}!");
+            session()->flash('message', "Schedule saved for {$user->name}!");
         } else {
             session()->flash('error', "User not found!");
         }

@@ -29,7 +29,7 @@
                 </x-primary-button>
             </div>
 
-            <table class="w-full text-sm text-left border-collapse table-auto">
+            <table class="w-full text-sm text-left border-collapse rounded-lg table-auto">
                 <thead>
                     <tr class="bg-gray-100 dark:bg-gray-700">
                         <th class="px-4 py-2 border">Name</th>

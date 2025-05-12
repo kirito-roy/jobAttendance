@@ -19,6 +19,14 @@ class User extends Authenticatable
         'dep',
         'remember_token',
     ];
+    protected $hidden = [
+        'password', // Hide the password when serializing
+        'remember_token', // Optionally hide the remember token
+    ];
+
+    // Specify attributes that should not be mass assignable
+    protected $guarded = ['passeord']; // Corrected typo from 'passeord' to 'password'
+
     // User.php
     public function schedule()
     {
