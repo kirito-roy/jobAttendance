@@ -23,7 +23,11 @@ class Schedule extends Component
         $today = new DateTime();
 
         // Calculate start and end of the week
-        $this->startOfWeek = (clone $today)->modify('monday')->format('Y-m-d');
+        if ($today->format('N') == 1) { // 'N' gives the day of the week (1 = Monday, 7 = Sunday)
+            $this->startOfWeek = $today->modify('monday')->format('Y-m-d');
+        } else {
+            $this->startOfWeek = $today->modify('last monday')->format('Y-m-d');
+        }
         $this->endOfWeek = (clone $today)->modify('sunday')->format('Y-m-d');
 
         // Preload all users with schedules

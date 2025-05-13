@@ -19,12 +19,15 @@
                 </div>
             @endif
 
-            <!-- Search Filter -->
+            <!-- Search and Filter -->
             <div class="flex mb-4">
-                <input type="text" wire:model="search"
+                <!-- Search Input -->
+                <input type="text" id="searchInput"
                     class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600"
                     placeholder="Search by name or email">
-                <x-primary-button wire:click="searchf" class="ml-2">
+
+                <!-- Search Button -->
+                <x-primary-button onclick="searchUser()" class="ml-2">
                     Search
                 </x-primary-button>
             </div>
@@ -39,9 +42,9 @@
                         <th class="px-4 py-2 border">Delete</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($users as $user)
-                        <tr class="hover:bg-gray-200 dark:hover:bg-gray-600">
+                <tbody id="userTableBody">
+                    @foreach ($users as $user)
+                        <tr id="user-id-{{ $user->id }}" class="hover:bg-gray-200 dark:hover:bg-gray-600">
                             <td class="px-4 py-2 border">{{ $user->name }}</td>
                             <td class="px-4 py-2 border">{{ $user->role ?? 'No role assigned' }}</td>
                             <td class="px-4 py-2 border">{{ $user->dep ?? 'No dep assigned' }}</td>
@@ -81,18 +84,43 @@
                                 </button>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-4 py-2 text-center border">No users found.</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- JavaScript Confirmation -->
+    <!-- JavaScript -->
     <script>
+        // Users data passed from the backend
+        const users = @json($users);
+
+        // Search and scroll to the matching user
+        function searchUser() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+
+            // Find the first matching user
+            const matchingUser = users.find(user =>
+                user.name.toLowerCase().includes(searchInput) ||
+                user.email.toLowerCase().includes(searchInput)
+            );
+
+            if (matchingUser) {
+                const row = document.getElementById(`user-id-${matchingUser.id}`);
+                if (row) {
+                    row.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                    row.style.backgroundColor = "#ffffcc"; // Highlight the row temporarily
+                    setTimeout(() => row.style.backgroundColor = "", 2000); // Remove highlight after 2 seconds
+                }
+            } else {
+                alert("No matching user found.");
+            }
+        }
+
+        // Delete confirmation
         function confirmDelete(userId) {
             if (confirm("Are you sure you want to delete this user?")) {
                 @this.call('delete', userId); // Calls the Livewire delete method

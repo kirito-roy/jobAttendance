@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
         } else if (Auth::user()->role == 'manager') {
             $request->session()->regenerate();
 
-            return redirect('/admin');
+            return redirect('/manager');
         } else {
             echo "account not apptoved, Admin must chose an depertment for you.";
         }

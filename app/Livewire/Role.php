@@ -12,7 +12,6 @@ class Role extends Component
     public $deps = ['Hr', 'It', 'Finance'];
     public $selectedRole = [];
     public $selectedDep = [];
-    public $search = ''; // Search term
     public $users = []; // Store filtered users
 
     public function mount()
@@ -20,20 +19,10 @@ class Role extends Component
         $this->loadUsers(); // Load all users initially
     }
 
-    public function searchf()
-    {
-        // Filter users based on the search term
-        $this->loadUsers();
-    }
 
     private function loadUsers()
     {
-        $this->users = User::query()
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%');
-            })
-            ->get();
+        $this->users = User::all();
 
         // Initialize selectedRole and selectedDep with current values
         foreach ($this->users as $user) {

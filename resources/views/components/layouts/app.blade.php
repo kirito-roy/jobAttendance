@@ -37,10 +37,15 @@
                                 @if (Auth::user()->role == 'user')
                                     <x-navigate href="/">home</x-navigate>
                                     <x-navigate href="/attendance">attendance</x-navigate>
-                                @elseif (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
-                                    <x-navigate href="/admin">Admin Panel</x-navigate>
+                                @elseif (Auth::user()->role == 'admin')
+                                    <x-navigate href="/admin">Admin
+                                        Panel</x-navigate>
                                     <x-navigate href="/role">Roles</x-navigate>
                                     <x-navigate href="/schedule">schedule</x-navigate>
+                                @elseif (Auth::user()->role == 'manager')
+                                    <x-navigate href="/manager">manager Panel</x-navigate>
+                                @endif
+                                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
                                     <x-navigate href="/report">report</x-navigate>
                                 @endif
                                 <x-navigate href="/profile">profile</x-navigate>
@@ -117,28 +122,36 @@
             <div class="hidden md:hidden" id="mobile-menu">
                 <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    <a href="#" class="block px-3 py-2 text-base font-medium text-white bg-gray-900 rounded-md"
-                        aria-current="page">Dashboard</a>
-                    <a href="#"
-                        class="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white">Team</a>
-                    <a href="#"
-                        class="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white">Projects</a>
-                    <a href="#"
-                        class="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white">Calendar</a>
-                    <a href="#"
-                        class="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white">Reports</a>
+                    @if (Auth::user()->role == 'user')
+                        <x-navigate href="/" class="block text-white">home</x-navigate>
+                        <x-navigate href="/attendance" class="block text-white">attendance</x-navigate>
+                    @elseif (Auth::user()->role == 'admin')
+                        <x-navigate href="/admin" class="block text-white">Admin
+                            Panel</x-navigate>
+                        <x-navigate href="/role" class="block text-white">Roles</x-navigate>
+                        <x-navigate href="/schedule" class="block text-white">schedule</x-navigate>
+                    @elseif (Auth::user()->role == 'manager')
+                        <x-navigate href="/manager" class="block text-white">manager Panel</x-navigate>
+                    @endif
+                    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
+                        <x-navigate href="/report" class="block text-white">report</x-navigate>
+                    @endif
+                    <x-navigate href="/profile" class="block text-white">profile</x-navigate>
+
+
+
+                    <x-navigate href="/about" class="block text-white">about</x-navigate>
+
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-700">
                     <div class="flex items-center px-5">
-                        <div class="shrink-0">
-                            <img class="rounded-full size-10"
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                alt="">
-                        </div>
-                        <div class="ml-3">
-                            <div class="font-medium text-white text-base/5">Tom Cook</div>
-                            <div class="text-sm font-medium text-gray-400">tom@example.com</div>
-                        </div>
+                        <form action="/logout" method="POST" style="display: inline;">
+                            @csrf <!-- Include CSRF token for Laravel -->
+                            <button type="submit"
+                                class="px-3 py-2 font-medium text-gray-300 rounded-md text-l hover:bg-gray-700 hover:text-white ">
+                                LOGOUT
+                            </button>
+                        </form>
                         <button type="button"
                             class="relative p-1 ml-auto text-gray-400 bg-gray-800 rounded-full shrink-0 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                             <span class="absolute -inset-1.5"></span>
@@ -150,12 +163,7 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="px-2 mt-3 space-y-1">
 
-                        <a href="#"
-                            class="block px-3 py-2 text-base font-medium text-gray-400 rounded-md hover:bg-gray-700 hover:text-white">Sign
-                            out</a>
-                    </div>
                 </div>
             </div>
         </nav>

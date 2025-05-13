@@ -39,12 +39,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/about', About::class);
     Route::get('/profile', Livewire\Profile::class);
     Route::get('/notification', Livewire\Notification::class);
-
-    // Routes for admin only
-    Route::middleware(['role:admin|manager'])->group(function () {
+    Route::middleware(['role:manager'])->group(function () {
+        Route::get('/manager', Livewire\ManagerPanel::class);
+    });
+    Route::middleware(['role:admin'])->group(function () {
         Route::get('/admin', Admin::class);
         Route::get('/role', Role::class);
         Route::get('/schedule', Livewire\Schedule::class);
+    });
+
+    // Routes for admin only
+    Route::middleware(['role:admin|manager'])->group(function () {
+
         Route::get('/report', Livewire\Report::class);
     });
 
