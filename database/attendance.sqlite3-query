@@ -6,3 +6,5 @@ FROM
     attendance_records;
 
 DELETE FROM attendance_records;
+
+DELETE FROM schedules;

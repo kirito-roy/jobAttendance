@@ -46,7 +46,6 @@
                                     <x-navigate href="/manager">manager Panel</x-navigate>
                                 @endif
                                 @if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
-                                    <x-navigate href="/report">report</x-navigate>
                                 @endif
                                 <x-navigate href="/profile">profile</x-navigate>
 

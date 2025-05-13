@@ -1,6 +1,6 @@
 <div>
     <x-slot:heading>schedule</x-slot:heading>
-    <div class="w-full h-full p-5 space-y-5 bg-white rounded-lg">
+    <div class="w-full h-full p-5 space-y-5 bg-white rounded-lg dark:bg-gray-800">
         <h1 class="text-xl font-bold text-center">Manage schedule</h1>
 
         <!-- Success Message -->
@@ -31,9 +31,9 @@
         </div>
 
         <!-- User Schedule Table -->
-        <div class="mt-4 overflow-x-auto bg-white rounded-lg shadow-md">
+        <div class="mt-4 overflow-x-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
             <table class="w-full text-left border-collapse">
-                <thead class="text-gray-700 bg-gray-200">
+                <thead class="bg-gray-200 dark:bg-gray-800">
                     <tr>
                         <th class="px-4 py-2 border">Name</th>
                         <th class="px-4 py-2 border">Email</th>
@@ -47,33 +47,32 @@
                 </thead>
                 <tbody id="userTableBody">
                     @foreach ($users as $index => $user)
-                        <tr id="user-id-{{ $user->id }}" class="hover:bg-gray-100">
+                        <tr id="user-id-{{ $user->id }}" class="">
                             <td class="px-4 py-2 border">{{ $user->name }}</td>
                             <td class="px-4 py-2 border">{{ $user->email }}</td>
                             <form wire:submit.prevent="schedule_form({{ $user->id }})">
-                                <td class="px-4 py-2 border bg-gray-50">
+                                <td class="px-4 py-2 border bg-gray-50 dark:bg-gray-800">
                                     <input type="time" wire:model.defer="times.{{ $user->id }}.monday"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-400 focus:border-blue-400">
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-400 focus:border-blue-400">
                                 </td>
-                                <td class="px-4 py-2 border bg-gray-50">
+                                <td class="px-4 py-2 border bg-gray-50 dark:bg-gray-800">
                                     <input type="time" wire:model.defer="times.{{ $user->id }}.tuesday"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-400 focus:border-blue-400">
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-400 focus:border-blue-400">
                                 </td>
-                                <td class="px-4 py-2 border bg-gray-50">
+                                <td class="px-4 py-2 border bg-gray-50 dark:bg-gray-800">
                                     <input type="time" wire:model.defer="times.{{ $user->id }}.wednesday"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-400 focus:border-blue-400">
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-400 focus:border-blue-400">
                                 </td>
-                                <td class="px-4 py-2 border bg-gray-50">
+                                <td class="px-4 py-2 border bg-gray-50 dark:bg-gray-800">
                                     <input type="time" wire:model.defer="times.{{ $user->id }}.thursday"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-400 focus:border-blue-400">
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-400 focus:border-blue-400">
                                 </td>
-                                <td class="px-4 py-2 border bg-gray-50">
+                                <td class="px-4 py-2 border bg-gray-50 dark:bg-gray-800">
                                     <input type="time" wire:model.defer="times.{{ $user->id }}.friday"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-400 focus:border-blue-400">
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-400 focus:border-blue-400">
                                 </td>
                                 <td class="px-4 py-2 text-center border">
-                                    <button type="submit"
-                                        class="px-3 py-1 text-white bg-green-600 rounded hover:bg-green-700">
+                                    <button type="submit" class="px-3 py-1 bg-green-600 rounded hover:bg-green-700">
                                         Save
                                     </button>
                                 </td>

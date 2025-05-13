@@ -9,10 +9,32 @@ class Notification extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'message', 'read_at'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'type',
+        'message',
+        'read_at',
+    ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'read_at' => 'datetime',
+    ];
+
+    /**
+     * Get the user that owns the notification.
+     */
     public function user()
     {
-        return $this->belongsTo(user::class);
+        return $this->belongsTo(User::class);
     }
 }
