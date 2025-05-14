@@ -121,7 +121,7 @@ class Notifications extends Component
 
         session()->flash('notification_message', 'Notification created successfully!');
 
-        // Clear the form
+        // Clear the form fields
         $this->reset(['email', 'type', 'message']);
         $this->loadNotifications();
     }
@@ -142,7 +142,7 @@ class Notifications extends Component
         if ($notification) {
             $notification->delete();
         }
-
-        $this->loadNotifications();
+        return redirect('/notification');
+        // $this->loadNotifications();
     }
 }

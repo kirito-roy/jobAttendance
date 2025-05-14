@@ -60,7 +60,9 @@
                     <div class="hidden md:block">
 
                         <div class="flex items-center ml-4 md:ml-6">
+                            <h1 class="text-white ">{{ Auth::user()->name }}</h1>
                             <div class="">
+
                                 @if (Auth::check())
                                     <form action="/logout" method="POST" style="display: inline;">
                                         @csrf <!-- Include CSRF token for Laravel -->
@@ -119,7 +121,7 @@
 
             <!-- Mobile menu, show/hide based on menu state. -->
             <div class="hidden md:hidden" id="mobile-menu">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <div class="justify-center px-2 pt-2 pb-3 space-y-1 text-center sm:px-3">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                     @if (Auth::user()->role == 'user')
                         <x-navigate href="/" class="block text-white">home</x-navigate>
@@ -133,7 +135,6 @@
                         <x-navigate href="/manager" class="block text-white">manager Panel</x-navigate>
                     @endif
                     @if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
-                        <x-navigate href="/report" class="block text-white">report</x-navigate>
                     @endif
                     <x-navigate href="/profile" class="block text-white">profile</x-navigate>
 
@@ -143,7 +144,8 @@
 
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-700">
-                    <div class="flex items-center px-5">
+                    <div class="flex items-center px-5 text-white">
+                        <h1>{{ Auth::user()->name }}</h1>
                         <form action="/logout" method="POST" style="display: inline;">
                             @csrf <!-- Include CSRF token for Laravel -->
                             <button type="submit"

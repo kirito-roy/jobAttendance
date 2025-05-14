@@ -1,28 +1,28 @@
 <div>
     <x-slot:heading>Notifications</x-slot:heading>
 
-    <div class="w-full h-full p-5 bg-gray-100">
+    <div class="w-full h-full p-5 bg-gray-100 dark:bg-gray-600">
         <!-- Page Heading -->
         <h1 class="mb-5 text-2xl font-bold text-center">Notifications and Alerts</h1>
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
 
             <!-- Notification Creation Form -->
-            <div class="p-4 mb-5 bg-white rounded-lg shadow-md">
+            <div class="p-4 mb-5 rounded-lg shadow-md dark:bg-gray-800">
                 <h2 class="mb-4 text-lg font-semibold">Create a New Notification</h2>
                 <form wire:submit.prevent="createNotification">
                     <div class="mb-3">
-                        <label for="email" class="block text-sm font-medium text-gray-700">User Email</label>
+                        <label for="email" class="block text-sm font-medium">User Email</label>
                         <input type="email" id="email" wire:model="email"
-                            class="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter user email">
                         @error('email')
                             <span class="text-sm text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="type" class="block text-sm font-medium text-gray-700">Notification Type</label>
+                        <label for="type" class="block text-sm font-medium">Notification Type</label>
                         <select id="type" wire:model="type"
-                            class="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            class="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Select Type</option>
                             <option value="late_checkin">Late Check-In</option>
                             <option value="early_checkout">Early Check-Out</option>
@@ -36,9 +36,9 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                        <label for="message" class="block text-sm font-medium">Message</label>
                         <textarea id="message" wire:model="message"
-                            class="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500"
                             rows="3" placeholder="Enter notification message"></textarea>
                         @error('message')
                             <span class="text-sm text-red-500">{{ $message }}</span>
@@ -58,7 +58,7 @@
         <!-- Notification Filters -->
         <div class="flex items-center justify-between mb-5">
             <div>
-                <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                <button class="px-4 py-2 text-black bg-gray-200 rounded hover:bg-gray-300"
                     wire:click="filterNotifications('all')">All</button>
                 <button class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
                     wire:click="filterNotifications('late_checkin')">Late Check-Ins</button>
@@ -72,7 +72,7 @@
         </div>
 
         <!-- Notifications List -->
-        <div id="notifications" class="p-4 bg-white rounded-lg shadow-md">
+        <div id="notifications" class="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
             @forelse ($notifications as $notification)
                 <div class="mb-4 p-4 border rounded @if (!$notification->read_at) bg-gray-100 @endif">
                     <p class="text-lg font-medium">{{ $notification->message }}</p>
