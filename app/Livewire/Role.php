@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class Role extends Component
 {
@@ -13,12 +14,18 @@ class Role extends Component
     public $selectedRole = [];
     public $selectedDep = [];
     public $users = []; // Store filtered users
+    public $newUser = [
+        'name' => '',
+        'email' => '',
+        'password' => '',
+        'role' => 'user',
+        'dep' => 'Hr',
+    ]; // New user details
 
     public function mount()
     {
         $this->loadUsers(); // Load all users initially
     }
-
 
     private function loadUsers()
     {
@@ -73,6 +80,42 @@ class Role extends Component
         } else {
             session()->flash('error', "You are not authorized to delete users.");
         }
+    }
+
+    public function createUser()
+    {
+        // Validate new user input
+        $this->validate([
+            'newUser.name' => 'required|string|max:255',
+            'newUser.email' => 'required|email|unique:users,email',
+            'newUser.password' => 'required|string|min:8',
+            'newUser.role' => 'required|in:' . implode(',', $this->roles),
+            'newUser.dep' => 'required|in:' . implode(',', $this->deps),
+        ]);
+
+        // Create the new user
+        $user = User::create([
+            'name' => $this->newUser['name'],
+            'email' => $this->newUser['email'],
+            'password' => Hash::make($this->newUser['password']),
+            'role' => $this->newUser['role'],
+            'dep' => $this->newUser['dep'],
+        ]);
+
+        // Clear the new user form
+        $this->newUser = [
+            'name' => '',
+            'email' => '',
+            'password' => '',
+            'role' => 'user',
+            'dep' => 'Hr',
+        ];
+
+        // Refresh the users list
+        $this->loadUsers();
+
+        // Display success message
+        session()->flash('message', "{$user->name} has been added successfully as a new user.");
     }
 
     public function render()
