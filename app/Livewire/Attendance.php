@@ -58,8 +58,8 @@ class Attendance extends Component
                 $a::create([
                     'user_id' => $id,
                     'status' => 'present',
-                    'check_in' => $this->time,
-                    'date' => $data,
+                    'check_in' => $todate . ' ' . $this->time . ':00',
+                    'date' => $todate,
                 ]);
                 session()->flash('message', 'Successfully Checked In');
             } else {
@@ -73,7 +73,7 @@ class Attendance extends Component
             if (explode(" ", $data->created_at)[0] == $todate && $data !== null) {
                 if ($data->status == 'present') {
                     if ($data->check_out == null) {
-                        $a::where('user_id', $id)->update(['check_out' => $this->time]);
+                        $a::where('user_id', $id)->update(['check_out' =>  $todate . ' ' . $this->time . ':00']);
                         session()->flash('message', 'Successfully Checked Out');
                     } else {
                         session()->flash('message', 'Already Checked out');
@@ -86,7 +86,7 @@ class Attendance extends Component
             }
         } else if ($this->status == 'absent') {
             if (explode(" ", $data->created_at)[0] != $todate || $data === null) {
-                $a::create(['status' => "absent", 'date' => $data,]);
+                $a::create(['status' => "absent", 'date' => $todate,]);
             } else if (explode(" ", $data->created_at)[0] == $todate && $data !== null) {
                 if ($data->status == 'present') {
                     session()->flash('message', 'You Are Present Today');
