@@ -9,7 +9,7 @@ class AttendanceRecord extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'check_in', 'check_out', 'status'];
+    protected $fillable = ['user_id', 'check_in', 'check_out', "date", 'status'];
 
     public function user()
     {

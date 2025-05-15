@@ -22,40 +22,78 @@
 
             <!-- Attendance Table -->
             <div class="mt-4 overflow-x-auto bg-white rounded-lg shadow-md">
-                <table class="w-full text-left border-collapse">
-                    <thead class="text-gray-700 bg-gray-200">
-                        <tr>
-                            <th class="px-4 py-2 border">Name</th>
-                            <th class="px-4 py-2 border">Email</th>
-                            <th class="px-4 py-2 border">Check-In Time</th>
-                            <th class="px-4 py-2 border">Check-Out Time</th>
-                            <th class="px-4 py-2 border">Status</th>
-                            <th class="px-4 py-2 border">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="overflow-x-auto">
+                    <!-- Desktop View -->
+                    <table class="hidden w-full text-left border-collapse md:table">
+                        <thead class="text-gray-700 bg-gray-200">
+                            <tr>
+                                <th class="px-4 py-2 border">Name</th>
+                                <th class="px-4 py-2 border">Email</th>
+                                <th class="px-4 py-2 border">Check-In Time</th>
+                                <th class="px-4 py-2 border">Check-Out Time</th>
+                                <th class="px-4 py-2 border">Status</th>
+                                <th class="px-4 py-2 border">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($attendanceRecords as $record)
+                                <tr id="record-id-{{ $record['id'] }}" class="hover:bg-gray-100">
+                                    <td class="px-4 py-2 border">{{ $record['name'] }}</td>
+                                    <td class="px-4 py-2 border">{{ $record['email'] }}</td>
+                                    <td class="px-4 py-2 border">{{ $record['check_in'] }}</td>
+                                    <td class="px-4 py-2 border">{{ $record['check_out'] }}</td>
+                                    <td class="px-4 py-2 border">{{ ucfirst($record['status']) }}</td>
+                                    <td class="px-4 py-2 text-center border">
+                                        <button
+                                            wire:click="openEditModal({{ $record['id'] ?? 'null' }}, {{ $record['user_id'] }})"
+                                            class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-4 py-2 text-center border">No records found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+
+                    <!-- Mobile View -->
+                    <div class="grid grid-cols-1 gap-4 md:hidden">
                         @forelse ($attendanceRecords as $record)
-                            <tr id="record-id-{{ $record['id'] }}" class="hover:bg-gray-100">
-                                <td class="px-4 py-2 border">{{ $record['name'] }}</td>
-                                <td class="px-4 py-2 border">{{ $record['email'] }}</td>
-                                <td class="px-4 py-2 border">{{ $record['check_in'] }}</td>
-                                <td class="px-4 py-2 border">{{ $record['check_out'] }}</td>
-                                <td class="px-4 py-2 border">{{ ucfirst($record['status']) }}</td>
-                                <td class="px-4 py-2 text-center border">
+                            <div id="record-id-{{ $record['id'] }}"
+                                class="p-4 bg-white rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600">
+                                <div class="mb-2">
+                                    <span class="font-semibold">Name:</span> {{ $record['name'] }}
+                                </div>
+                                <div class="mb-2">
+                                    <span class="font-semibold">Email:</span> {{ $record['email'] }}
+                                </div>
+                                <div class="mb-2">
+                                    <span class="font-semibold">Check-In Time:</span> {{ $record['check_in'] }}
+                                </div>
+                                <div class="mb-2">
+                                    <span class="font-semibold">Check-Out Time:</span> {{ $record['check_out'] }}
+                                </div>
+                                <div class="mb-2">
+                                    <span class="font-semibold">Status:</span> {{ ucfirst($record['status']) }}
+                                </div>
+                                <div class="text-center">
                                     <button
                                         wire:click="openEditModal({{ $record['id'] ?? 'null' }}, {{ $record['user_id'] }})"
                                         class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
                                         Edit
                                     </button>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         @empty
-                            <tr>
-                                <td colspan="6" class="px-4 py-2 text-center border">No records found.</td>
-                            </tr>
+                            <div class="p-4 text-center bg-white rounded-lg shadow dark:bg-gray-700">
+                                No records found.
+                            </div>
                         @endforelse
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
 
             <!-- Edit Modal -->

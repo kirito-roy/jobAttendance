@@ -23,5 +23,23 @@ class UserSeeder extends Seeder
             'address' => null, // Set to null if not provided
             'dep' => null, // Set to null if not provided
         ]);
+        user::create([
+            'name' => 'manager', // Replace with the desired admin name
+            'email' => 'roy184433@gmail.com', // Admin email
+            'password' => bcrypt('123456789'), // Admin password (hashed)
+            'role' => 'manager', // Admin role
+            'phone' => null, // Set to null if not provided
+            'address' => null, // Set to null if not provided
+            'dep' => null, // Set to null if not provided
+        ]);
+        user::create([
+            'name' => 'sumit', // Replace with the desired admin name
+            'email' => 'sumit@gmail.com', // Admin email
+            'password' => bcrypt('123456789'), // Admin password (hashed)
+            'role' => 'user', // Admin role
+            'phone' => null, // Set to null if not provided
+            'address' => null, // Set to null if not provided
+            'dep' => 'It', // Set to null if not provided
+        ]);
     }
 }
