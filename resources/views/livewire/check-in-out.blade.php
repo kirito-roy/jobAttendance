@@ -1,6 +1,6 @@
 <div>
     <x-slot:heading>checkInOut</x-slot:heading>
-    <div class="w-full h-full p-5 space-y-5 bg-white rounded-lg ">
+    <div class="w-full h-full p-5 space-y-5 bg-white rounded-lg dark:bg-gray-800 ">
         <h1 class="text-xl font-bold text-center">Attendance for {{ $date }}</h1>
         @if ($dateinweek)
 
@@ -21,11 +21,11 @@
             @endif
 
             <!-- Attendance Table -->
-            <div class="mt-4 overflow-x-auto bg-white rounded-lg shadow-md">
+            <div class="mt-4 overflow-x-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <div class="overflow-x-auto">
                     <!-- Desktop View -->
                     <table class="hidden w-full text-left border-collapse md:table">
-                        <thead class="text-gray-700 bg-gray-200">
+                        <thead class="bg-gray-200 dark:bg-gray-800">
                             <tr>
                                 <th class="px-4 py-2 border">Name</th>
                                 <th class="px-4 py-2 border">Email</th>
@@ -37,7 +37,7 @@
                         </thead>
                         <tbody>
                             @forelse ($attendanceRecords as $record)
-                                <tr id="record-id-{{ $record['id'] }}" class="hover:bg-gray-100">
+                                <tr id="record-id-{{ $record['id'] }}" class="dark:bg-gray-800">
                                     <td class="px-4 py-2 border">{{ $record['name'] }}</td>
                                     <td class="px-4 py-2 border">{{ $record['email'] }}</td>
                                     <td class="px-4 py-2 border">{{ $record['check_in'] }}</td>
@@ -99,7 +99,7 @@
             <!-- Edit Modal -->
             @if ($showEditModal)
                 <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                    <div class="p-6 bg-white rounded shadow-md w-96">
+                    <div class="p-6 bg-white rounded shadow-md w-96 dark:bg-gray-800">
                         <h2 class="mb-4 text-lg font-bold">Edit Attendance Record</h2>
                         @if (session()->has('message'))
                             <div
@@ -116,22 +116,23 @@
                         @endif
 
                         <div class="mb-4">
-                            <label for="check_in" class="block text-sm font-medium text-gray-700">Check-In Time</label>
+                            <label for="check_in" class="block text-sm font-medium dark:bg-gray-800">Check-In
+                                Time</label>
                             <input type="time" id="check_in" wire:model="editRecord.check_in"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-400 focus:border-blue-400">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-400 focus:border-blue-400">
                         </div>
 
                         <div class="mb-4">
-                            <label for="check_out" class="block text-sm font-medium text-gray-700">Check-Out
+                            <label for="check_out" class="block text-sm font-medium">Check-Out
                                 Time</label>
                             <input type="time" id="check_out" wire:model="editRecord.check_out"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-400 focus:border-blue-400">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-400 focus:border-blue-400">
                         </div>
 
                         <div class="mb-4">
-                            <label for="Status" class="block text-sm font-medium text-gray-700">Status</label>
+                            <label for="Status" class="block text-sm font-medium dark:bg-gray-800">Status</label>
                             <select id="Status" wire:model="editRecord.status"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-400 focus:border-blue-400">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 focus:ring-blue-400 focus:border-blue-400">
                                 <option value="present">Present</option>
                                 <option value="absent">Absent</option>
                             </select>
