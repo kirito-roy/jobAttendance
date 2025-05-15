@@ -138,22 +138,22 @@
                     <div>
                         <label for="name" class="block mb-1 text-sm font-semibold">Name:</label>
                         <input type="text" wire:model.defer="newUser.name" id="name"
-                            class="w-full px-3 py-2 border rounded-md">
+                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-800">
                     </div>
                     <div>
                         <label for="email" class="block mb-1 text-sm font-semibold">Email:</label>
                         <input type="email" wire:model.defer="newUser.email" id="email"
-                            class="w-full px-3 py-2 border rounded-md">
+                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-800">
                     </div>
                     <div>
                         <label for="password" class="block mb-1 text-sm font-semibold">Password:</label>
                         <input type="password" wire:model.defer="newUser.password" id="password"
-                            class="w-full px-3 py-2 border rounded-md">
+                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-800">
                     </div>
                     <div>
                         <label for="role" class="block mb-1 text-sm font-semibold">Role:</label>
                         <select wire:model.defer="newUser.role" id="role"
-                            class="w-full px-3 py-2 border rounded-md">
+                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-800">
                             <option value="user">User</option>
                             <option value="manager">Manager</option>
 
@@ -163,7 +163,7 @@
                     <div>
                         <label for="role" class="block mb-1 text-sm font-semibold">Role:</label>
                         <select wire:model.defer="newUser.dep" id="role"
-                            class="w-full px-3 py-2 border rounded-md">
+                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-800">
                             <option value="It">It</option>
                             <option value="Finance">Finance</option>
 
