@@ -18,8 +18,8 @@ class Role extends Component
         'name' => '',
         'email' => '',
         'password' => '',
-        'role' => 'user',
-        'dep' => 'Hr',
+        'role' => '',
+        'dep' => '',
     ];
 
     public function mount()
@@ -95,8 +95,8 @@ class Role extends Component
             'name' => '',
             'email' => '',
             'password' => '',
-            'role' => 'user',
-            'dep' => 'Hr',
+            'role' => '',
+            'dep' => '',
         ];
 
         $this->loadUsers();

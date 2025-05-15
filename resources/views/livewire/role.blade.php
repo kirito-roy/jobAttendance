@@ -51,14 +51,14 @@
                                 <td class="px-4 py-2 border">
                                     <form wire:submit.prevent="submit_role({{ $user->id }})" class="flex flex-col">
                                         <select wire:model.defer="selectedRole.{{ $user->id }}" name="role_id"
-                                            class="w-full px-3 py-2 mt-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
+                                            class="w-full px-3 py-2 mt-1 text-sm rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
                                             <option value="">Select Role</option>
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role }}">{{ ucfirst($role) }}</option>
                                             @endforeach
                                         </select>
                                         <select wire:model.defer="selectedDep.{{ $user->id }}" name="dep"
-                                            class="w-full px-3 py-2 mt-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
+                                            class="w-full px-3 py-2 mt-1 text-sm rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
                                             <option value="">Select Dep</option>
                                             @foreach ($deps as $dep)
                                                 <option value="{{ $dep }}">{{ ucfirst($dep) }}</option>
@@ -98,14 +98,14 @@
                                 <form wire:submit.prevent="submit_role({{ $user->id }})"
                                     class="flex flex-col space-y-2">
                                     <select wire:model.defer="selectedRole.{{ $user->id }}" name="role_id"
-                                        class="w-full px-3 py-2 mt-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
+                                        class="w-full px-3 py-2 mt-1 text-sm rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
                                         <option value="">Select Role</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role }}">{{ ucfirst($role) }}</option>
                                         @endforeach
                                     </select>
                                     <select wire:model.defer="selectedDep.{{ $user->id }}" name="dep"
-                                        class="w-full px-3 py-2 mt-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
+                                        class="w-full px-3 py-2 mt-1 text-sm rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
                                         <option value="">Select Dep</option>
                                         @foreach ($deps as $dep)
                                             <option value="{{ $dep }}">{{ ucfirst($dep) }}</option>
@@ -154,6 +154,7 @@
                         <label for="role" class="block mb-1 text-sm font-semibold">Role:</label>
                         <select wire:model.defer="newUser.role" id="role"
                             class="w-full px-3 py-2 border rounded-md dark:bg-gray-800">
+                            <option value="" disabled>select option</option>
                             <option value="user">User</option>
                             <option value="manager">Manager</option>
 
@@ -164,6 +165,8 @@
                         <label for="role" class="block mb-1 text-sm font-semibold">Role:</label>
                         <select wire:model.defer="newUser.dep" id="role"
                             class="w-full px-3 py-2 border rounded-md dark:bg-gray-800">
+                            <option value="" disabled>select option</option>
+
                             <option value="It">It</option>
                             <option value="Finance">Finance</option>
 
