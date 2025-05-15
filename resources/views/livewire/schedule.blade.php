@@ -3,37 +3,30 @@
     <div class="w-full h-full p-5 space-y-5 bg-white rounded-lg dark:bg-gray-800">
         <h1 class="text-xl font-bold text-center">Manage schedule</h1>
 
-        <!-- Success Message -->
         @if (session()->has('message'))
             <div class="p-4 mb-4 text-green-700 bg-green-100 rounded-md dark:text-green-200 dark:bg-green-900">
                 {{ session('message') }}
             </div>
         @endif
 
-        <!-- Error Message -->
         @if (session()->has('error'))
             <div class="p-4 mb-4 text-red-700 bg-red-100 rounded-md dark:text-red-200 dark:bg-red-900">
                 {{ session('error') }}
             </div>
         @endif
 
-        <!-- Search and Filter -->
         <div class="flex items-center space-x-4">
-            <!-- Search Input -->
             <input type="text" id="searchInput"
                 class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600"
                 placeholder="Search by name or email">
 
-            <!-- Search Button -->
             <x-primary-button onclick="searchUser()">
                 Search
             </x-primary-button>
         </div>
 
-        <!-- User Schedule Table -->
         <div class="mt-4 overflow-x-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div class="overflow-x-auto">
-                <!-- Desktop View -->
                 <table class="hidden w-full text-left border-collapse md:table">
                     <thead class="bg-gray-200 dark:bg-gray-800">
                         <tr>
@@ -85,7 +78,6 @@
                     </tbody>
                 </table>
 
-                <!-- Mobile View -->
                 <div class="grid grid-cols-1 gap-4 md:hidden">
                     @foreach ($users as $index => $user)
                         <div id="user-id-{{ $user->id }}"
@@ -138,14 +130,11 @@
 </div>
 
 <script>
-    // Users data passed from the backend
     const users = @json($users);
 
-    // Search and scroll to the matching user
     function searchUser() {
         const searchInput = document.getElementById("searchInput").value.toLowerCase();
 
-        // Find the first matching user
         const matchingUser = users.find(user =>
             user.name.toLowerCase().includes(searchInput) ||
             user.email.toLowerCase().includes(searchInput)

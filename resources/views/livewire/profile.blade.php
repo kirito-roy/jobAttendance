@@ -10,14 +10,12 @@
                 </div>
             @endif
 
-            <!-- Error Message -->
             @if (session()->has('error'))
                 <div class="p-4 mb-4 text-red-700 bg-red-100 rounded-md dark:text-red-200 dark:bg-red-900">
                     {{ session('error') }}
                 </div>
             @endif
             <form wire:submit.prevent='submit_profile' class="mt-6 space-y-4">
-                <!-- Name -->
                 <div>
                     <label for="name"
                         class="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-200">Name:</label>
@@ -25,7 +23,6 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
                 </div>
 
-                <!-- Email -->
                 <div>
                     <label for="email"
                         class="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-200">Email:</label>
@@ -33,7 +30,6 @@
                         class="w-full px-3 py-2 bg-gray-200 border border-gray-300 rounded-md shadow-sm cursor-not-allowed focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                 </div>
 
-                <!-- Phone -->
                 <div>
                     <label for="phone"
                         class="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-200">Phone:</label>
@@ -43,7 +39,6 @@
                         title="Please enter a valid Indian phone number (10 digits starting with 6, 7, 8, or 9)">
                 </div>
 
-                <!-- Address -->
                 <div>
                     <label for="address"
                         class="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-200">Address:</label>
@@ -51,7 +46,6 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600">
                 </div>
 
-                <!-- Department -->
                 <div>
                     <label for="department"
                         class="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-200">Department:</label>
@@ -59,7 +53,6 @@
                         class="w-full px-3 py-2 bg-gray-200 border border-gray-300 rounded-md shadow-sm cursor-not-allowed focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                 </div>
 
-                <!-- Role (Read-Only) -->
                 <div>
                     <label for="role"
                         class="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-200">Role:</label>
@@ -67,7 +60,6 @@
                         class="w-full px-3 py-2 bg-gray-200 border border-gray-300 rounded-md shadow-sm cursor-not-allowed focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                 </div>
 
-                <!-- Password -->
                 <div>
                     <label for="password" class="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-200">New
                         Password:</label>
@@ -76,7 +68,6 @@
                         placeholder="Enter new password (optional)">
                 </div>
 
-                <!-- Submit Button -->
                 <div class="text-center">
                     <button type="submit"
                         class="w-full px-4 py-2 font-semibold text-white transition duration-150 bg-indigo-600 rounded-md hover:bg-indigo-700">Save

@@ -20,27 +20,22 @@ class ManagerPanel extends Component
 
     public function mount()
     {
-        // Calculate attendance summaries
         $this->detailedAttendance = $this->fetchWeeklyDetailedAttendance();
         $this->dailySummary = $this->calculateDailySummary($this->detailedAttendance);
         $this->weeklySummary = $this->calculateWeeklySummary();
         $this->monthlySummary = $this->calculateMonthlySummary();
 
-        // Fetch detailed attendance for the current week
         $this->hasSchedule();
     }
     public function exportReport()
     {
         $filename = 'attendance_report_' . Carbon::now()->format('Ymd_His') . '.csv';
 
-        // Create a streamed response
         return new StreamedResponse(function () {
             $file = fopen('php://output', 'w');
 
-            // Add CSV headers
             fputcsv($file, ['Date', 'Total', 'Present (%)', 'Absent (%)']);
 
-            // Add detailed attendance records
             foreach ($this->detailedAttendance as $record) {
                 $presentPercentage = $record['total'] > 0
                     ? round(($record['present_count'] / $record['total']) * 100, 2)
@@ -97,7 +92,6 @@ class ManagerPanel extends Component
             foreach ($dates as $date) {
                 $date = Carbon::parse($date)->format('Y-m-d');
 
-                // Fetch user's schedule for the week containing the date
                 $schedule = Schedule::where('user_id', $user->id)
                     ->where('startOfWeek', '<=', $date)
                     ->where('endOfWeek', '>=', $date)
@@ -105,28 +99,23 @@ class ManagerPanel extends Component
 
                 $scheduledTime = $schedule ? $schedule->{strtolower(Carbon::parse($date)->format('l'))} : null;
 
-                // Fetch attendance for the day
                 $attendance = AttendanceRecord::where('user_id', $user->id)
                     ->whereDate('created_at', $date)
                     ->first();
 
-                // Determine attendance status based on schedule
                 if (!$scheduledTime) {
-                    // No schedule for the day, assume "Not Scheduled"
                     $attendanceData[] = [
                         'user_id' => $user->id,
                         'date' => $date,
                         'status' => 'Not Scheduled',
                     ];
                 } elseif (!$attendance || Carbon::parse($attendance->check_in)->greaterThan(Carbon::parse($scheduledTime))) {
-                    // No check-in or late check-in -> Absent
                     $attendanceData[] = [
                         'user_id' => $user->id,
                         'date' => $date,
                         'status' => 'Absent',
                     ];
                 } else {
-                    // On-time check-in -> Present
                     $attendanceData[] = [
                         'user_id' => $user->id,
                         'date' => $date,

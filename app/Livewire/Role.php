@@ -13,14 +13,14 @@ class Role extends Component
     public $deps = ['Hr', 'It', 'Finance'];
     public $selectedRole = [];
     public $selectedDep = [];
-    public $users = []; // Store filtered users
+    public $users = [];
     public $newUser = [
         'name' => '',
         'email' => '',
         'password' => '',
         'role' => 'user',
         'dep' => 'Hr',
-    ]; // New user details
+    ];
 
     public function mount()
     {
@@ -30,8 +30,6 @@ class Role extends Component
     private function loadUsers()
     {
         $this->users = User::all();
-
-        // Initialize selectedRole and selectedDep with current values
         foreach ($this->users as $user) {
             $this->selectedRole[$user->id] = $user->role;
             $this->selectedDep[$user->id] = $user->dep;
@@ -40,23 +38,17 @@ class Role extends Component
 
     public function submit_role($userId)
     {
-        // Validate the input
         $this->validate([
             "selectedRole.$userId" => 'required|in:' . implode(',', $this->roles),
             "selectedDep.$userId" => 'required|in:' . implode(',', $this->deps),
         ]);
 
-        // Find the user and update their role and department
         $user = User::find($userId);
         if ($user) {
             $user->role = $this->selectedRole[$userId] ?? $user->role;
             $user->dep = $this->selectedDep[$userId] ?? $user->dep;
             $user->save();
-
-            // Refresh users list
             $this->loadUsers();
-
-            // Display success message
             session()->flash('message', "Role and department for {$user->name} updated successfully!");
         } else {
             session()->flash('error', 'User not found.');
@@ -70,7 +62,6 @@ class Role extends Component
             if ($user) {
                 $user->delete();
 
-                // Refresh the users list
                 $this->loadUsers();
 
                 session()->flash('message', "{$user->name} has been deleted successfully.");
@@ -84,7 +75,6 @@ class Role extends Component
 
     public function createUser()
     {
-        // Validate new user input
         $this->validate([
             'newUser.name' => 'required|string|max:255',
             'newUser.email' => 'required|email|unique:users,email',
@@ -93,7 +83,6 @@ class Role extends Component
             'newUser.dep' => 'required|in:' . implode(',', $this->deps),
         ]);
 
-        // Create the new user
         $user = User::create([
             'name' => $this->newUser['name'],
             'email' => $this->newUser['email'],
@@ -102,7 +91,6 @@ class Role extends Component
             'dep' => $this->newUser['dep'],
         ]);
 
-        // Clear the new user form
         $this->newUser = [
             'name' => '',
             'email' => '',
@@ -111,10 +99,8 @@ class Role extends Component
             'dep' => 'Hr',
         ];
 
-        // Refresh the users list
         $this->loadUsers();
 
-        // Display success message
         session()->flash('message', "{$user->name} has been added successfully as a new user.");
     }
 

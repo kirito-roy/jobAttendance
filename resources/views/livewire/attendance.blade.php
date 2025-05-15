@@ -3,7 +3,6 @@
 
     <div class="flex items-center justify-center h-screen bg-transparent">
         <form wire:submit.prevent="submitForm" class="p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800 w-96">
-            <!-- Status Dropdown -->
             <div>
                 <label for="status" class="block mb-1 text-sm font-semibold ">Status:</label>
                 <select id="status" wire:model="status" required
@@ -16,7 +15,6 @@
 
             </div>
 
-            <!-- Dynamic Blocks -->
 
             <div>
                 <label for="time" class="block mb-1 text-sm font-semibold ">time:</label>
@@ -25,7 +23,6 @@
 
             </div>
 
-            <!-- Submit Button -->
             <div class="text-center">
                 <button type="submit"
                     class="w-full px-4 py-2 font-semibold text-white transition duration-150 bg-indigo-600 rounded-md hover:bg-indigo-700">
@@ -33,7 +30,6 @@
                 </button>
             </div>
 
-            <!-- Success Message -->
             @if (session()->has('message'))
                 <div class="mt-4 text-center text-green-500">{{ session('message') }}</div>
             @endif

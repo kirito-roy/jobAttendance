@@ -11,23 +11,15 @@ class Attendance extends Component
 {
     public $status;
     public $time;
-    // public $reason;
-    // public $time_out;
-
-
-    // Validation rules
     protected $rules = [
         'status' => 'required|string|max:255',
         'time' => 'nullable|date_format:H:i',
-        // 'reason' => 'nullable|string|max:255',
-        // 'time_out' => 'nullable|date_format:H:i',
     ];
 
     public function mount()
     {
         $a = new AttendanceRecord();
         $id = Auth::user()->id;
-        // Initialize default values
         $data = $a::where('user_id', $id)->latest()->first();
         $todate = date('Y-m-d');
 
@@ -38,16 +30,13 @@ class Attendance extends Component
             $this->status = "checkout";
         }
         $this->time = $now->format('H:i');
-        // $this->time_out = $now->format('H:i');
     }
 
     public function submitForm()
     {
-        // Validate the form data
         $validatedData = $this->validate();
         $a = new AttendanceRecord();
         $id = Auth::user()->id;
-        // For demonstration, log the submitted data
         logger('Attendance Submitted:', $validatedData);
 
         $todate = date('Y-m-d');
@@ -95,12 +84,6 @@ class Attendance extends Component
                 }
             }
         }
-
-        // Optionally, reset the form fields
-
-        // Provide feedback to the user
-        // session()->flash('message', json_encode($data->check_in));
-        // return redirect("/");
     }
 
     public function render()

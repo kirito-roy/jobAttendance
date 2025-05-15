@@ -2,11 +2,9 @@
     <x-slot:heading>Notifications</x-slot:heading>
 
     <div class="w-full h-full p-5 bg-gray-100 dark:bg-gray-600">
-        <!-- Page Heading -->
         <h1 class="mb-5 text-2xl font-bold text-center">Notifications and Alerts</h1>
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
 
-            <!-- Notification Creation Form -->
             <div class="p-4 mb-5 rounded-lg shadow-md dark:bg-gray-800">
                 <h2 class="mb-4 text-lg font-semibold">Create a New Notification</h2>
                 <form wire:submit.prevent="createNotification">
@@ -55,7 +53,6 @@
             </div>
         @endif
 
-        <!-- Notification Filters -->
         <div class="flex items-center justify-between mb-5">
             <div>
                 <button class="px-4 py-2 text-black bg-gray-200 rounded hover:bg-gray-300"
@@ -71,7 +68,6 @@
                 All as Read</button>
         </div>
 
-        <!-- Notifications List -->
         <div id="notifications" class="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
             @forelse ($notifications as $notification)
                 <div class="mb-4 p-4 border rounded @if (!$notification->read_at) bg-gray-100 @endif">
@@ -79,13 +75,11 @@
                     <p class="text-sm text-gray-500">Type: {{ ucfirst(str_replace('_', ' ', $notification->type)) }}</p>
                     <p class="text-sm text-gray-500">Received: {{ $notification->created_at->diffForHumans() }}</p>
                     <div class="flex items-center mt-2 space-x-2">
-                        <!-- Mark as Read Button -->
                         @if (!$notification->read_at)
                             <button class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
                                 wire:click="markAsRead({{ $notification->id }})">Mark as Read</button>
                         @endif
 
-                        <!-- Delete Button (Admins and Managers Only) -->
                         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
                             <button class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
                                 wire:click="deleteNotification({{ $notification->id }})">Delete</button>

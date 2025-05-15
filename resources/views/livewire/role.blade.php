@@ -5,28 +5,23 @@
         <div class="w-full h-full p-8 space-y-6 overflow-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
             <h1 class="text-xl font-bold text-center">Role Management</h1>
 
-            <!-- Success Message -->
             @if (session()->has('message'))
                 <div class="p-4 mb-4 text-green-700 bg-green-100 rounded-md dark:text-green-200 dark:bg-green-900">
                     {{ session('message') }}
                 </div>
             @endif
-
-            <!-- Error Message -->
             @if (session()->has('error'))
                 <div class="p-4 mb-4 text-red-700 bg-red-100 rounded-md dark:text-red-200 dark:bg-red-900">
                     {{ session('error') }}
                 </div>
             @endif
 
-            <!-- Add New User Button -->
             <div class="mb-4 text-right">
                 <x-primary-button onclick="openCreateUserModal()">
                     Add New User
                 </x-primary-button>
             </div>
 
-            <!-- Search and Filter -->
             <div class="flex mb-4">
                 <input type="text" id="searchInput"
                     class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-indigo-600 dark:focus:border-indigo-600"
@@ -36,7 +31,6 @@
                 </x-primary-button>
             </div>
 
-            <!-- User Table -->
             <div class="overflow-x-auto">
                 <table class="hidden w-full text-sm text-left border-collapse rounded-lg table-auto md:table">
                     <thead>
@@ -87,7 +81,6 @@
                     </tbody>
                 </table>
 
-                <!-- Mobile View -->
                 <div class="grid grid-cols-1 gap-4 md:hidden">
                     @foreach ($users as $user)
                         <div id="user-id-{{ $user->id }}"
@@ -137,7 +130,6 @@
         </div>
     </div>
 
-    <!-- Modal for Adding New User -->
     <div id="createUserModal" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50">
         <div class="flex items-center justify-center min-h-screen">
             <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">

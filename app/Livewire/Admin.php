@@ -62,7 +62,6 @@ class Admin extends Component
             foreach ($dates as $date) {
                 $date = Carbon::parse($date)->format('Y-m-d');
 
-                // Fetch user's schedule for the week containing the date
                 $schedule = Schedule::where('user_id', $user->id)
                     ->where('startOfWeek', '<=', $date)
                     ->where('endOfWeek', '>=', $date)
@@ -70,28 +69,23 @@ class Admin extends Component
 
                 $scheduledTime = $schedule ? $schedule->{strtolower(Carbon::parse($date)->format('l'))} : null;
 
-                // Fetch attendance for the day
                 $attendance = AttendanceRecord::where('user_id', $user->id)
                     ->whereDate('created_at', $date)
                     ->first();
 
-                // Determine attendance status based on schedule
                 if (!$scheduledTime) {
-                    // No schedule for the day, assume "Not Scheduled"
                     $attendanceData[] = [
                         'user_id' => $user->id,
                         'date' => $date,
                         'status' => 'Not Scheduled',
                     ];
                 } elseif (!$attendance || Carbon::parse($attendance->check_in)->greaterThan(Carbon::parse($scheduledTime))) {
-                    // No check-in or late check-in -> Absent
                     $attendanceData[] = [
                         'user_id' => $user->id,
                         'date' => $date,
                         'status' => 'Absent',
                     ];
                 } else {
-                    // On-time check-in -> Present
                     $attendanceData[] = [
                         'user_id' => $user->id,
                         'date' => $date,
@@ -155,14 +149,11 @@ class Admin extends Component
     {
         $filename = 'attendance_report_' . Carbon::now()->format('Ymd_His') . '.csv';
 
-        // Create a streamed response
         return new StreamedResponse(function () {
             $file = fopen('php://output', 'w');
 
-            // Add CSV headers
             fputcsv($file, ['Date', 'Total', 'Present (%)', 'Absent (%)']);
 
-            // Add detailed attendance records
             foreach ($this->detailedAttendance as $record) {
                 $presentPercentage = $record['total'] > 0
                     ? round(($record['present_count'] / $record['total']) * 100, 2)

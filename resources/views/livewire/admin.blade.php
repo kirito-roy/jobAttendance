@@ -9,21 +9,17 @@
                     {{ $unScheduled }} users
                 </div>
             @endif
-            <!-- Summary Cards -->
             <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-                <!-- Daily Summary -->
                 <div class="p-6 text-center bg-white rounded-lg shadow-md dark:bg-gray-800">
                     <h2 class="text-xl font-semibold">Daily Summary</h2>
                     <p class="mt-2 text-lg font-bold text-green-600">Present: {{ $dailySummary['present'] }}%</p>
                     <p class="text-lg font-bold text-red-500">Absent: {{ $dailySummary['absent'] }}%</p>
                 </div>
-                <!-- Weekly Summary -->
                 <div class="p-6 text-center bg-white rounded-lg shadow-md dark:bg-gray-800">
                     <h2 class="text-xl font-semibold">Weekly Summary</h2>
                     <p class="mt-2 text-lg font-bold text-green-600">Present: {{ $weeklySummary['present'] }}%</p>
                     <p class="text-lg font-bold text-red-500">Absent: {{ $weeklySummary['absent'] }}%</p>
                 </div>
-                <!-- Monthly Summary -->
                 <div class="p-6 text-center bg-white rounded-lg shadow-md dark:bg-gray-800">
                     <h2 class="text-xl font-semibold">Monthly Summary</h2>
                     <p class="mt-2 text-lg font-bold text-green-600">Present: {{ $monthlySummary['present'] }}%</p>
@@ -31,14 +27,12 @@
                 </div>
             </div>
 
-            <!-- Buttons -->
             <div class="flex justify-end mt-6 space-x-4">
                 <button wire:click="exportReport" class="px-4 py-2 font-bold bg-green-600 rounded hover:bg-green-700">
                     Export Reports
                 </button>
             </div>
 
-            <!-- Detailed Attendance Table -->
             <div class="p-6 mt-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <h2 class="mb-4 text-2xl font-semibold ">Detailed Attendance</h2>
                 <table class="w-full border border-collapse border-gray-200">

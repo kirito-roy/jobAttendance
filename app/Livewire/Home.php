@@ -61,23 +61,19 @@ class Home extends Component
     public function mount()
     {
         if (!Auth::check()) {
-            return redirect('/login'); // Redirect to login if user is not authenticated
+            return redirect('/login');
         }
 
         if (Auth::user()->role === 'admin') {
-            return redirect('/admin'); // Redirect admin to the admin page
+            return redirect('/admin');
         } else if (Auth::user()->role === 'manager') {
-            return redirect('/manager'); // Redirect manager to the manager page
+            return redirect('/manager');
         }
 
-        // Find the user's schedule
         $this->findSchedule();
         $this->getattendance();
     }
 
-    /**
-     * Render the Livewire component view
-     */
     public function render()
     {
         return view('livewire.home');

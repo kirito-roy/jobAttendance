@@ -19,7 +19,6 @@ class CheckInOut extends Component
     public function mount($date)
     {
         try {
-            // Ensure the provided date is valid and within the current week
             if (Carbon::parse($date)->between(Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek())) {
                 $this->date = Carbon::parse($date)->format('Y-m-d'); // Ensure the date is in 'Y-m-d' format
                 $this->loadAttendanceRecords();
@@ -34,15 +33,12 @@ class CheckInOut extends Component
 
     public function loadAttendanceRecords()
     {
-        // Fetch all users with the "user" role
         $users = User::where('role', 'user')->get();
 
-        // Fetch attendance records for the given date
         $attendanceRecords = AttendanceRecord::whereDate('date', $this->date) // Filter by the specific date
             ->get()
             ->keyBy('user_id'); // Use user_id as the key for easy lookup
 
-        // Map all users with their respective attendance data
         $this->attendanceRecords = $users->map(function ($user) use ($attendanceRecords) {
             $attendance = $attendanceRecords->get($user->id);
 
@@ -60,7 +56,6 @@ class CheckInOut extends Component
 
     public function openEditModal($recordId = null, $userId = null)
     {
-        // Find the attendance record if the record ID is provided
         $record = $recordId ? AttendanceRecord::find($recordId) : null;
 
         $this->editRecord = [
@@ -76,12 +71,10 @@ class CheckInOut extends Component
 
     public function updateRecord()
     {
-        // Ensure default values for check_in, check_out, and status
         $this->editRecord['check_in'] = $this->editRecord['check_in'] ?? null;
         $this->editRecord['check_out'] = $this->editRecord['check_out'] ?? null;
         $this->editRecord['status'] = $this->editRecord['status'] ?? 'present';
 
-        // Append the date to the check_in and check_out times
         if ($this->editRecord['check_in']) {
             $this->editRecord['check_in'] = $this->date . ' ' . $this->editRecord['check_in'];
         }
@@ -89,13 +82,10 @@ class CheckInOut extends Component
             $this->editRecord['check_out'] = $this->date . ' ' . $this->editRecord['check_out'];
         }
 
-        // Validation to ensure required fields are filled
         if (!$this->editRecord['check_in'] || !$this->editRecord['check_out']) {
             session()->flash('error', 'Please fill in all inputs before saving.');
             return;
         }
-
-        // Create or update the attendance record
         AttendanceRecord::updateOrCreate(
             ['id' => $this->editRecord['id']],
             [
@@ -109,8 +99,6 @@ class CheckInOut extends Component
         );
 
         session()->flash('message', 'Attendance record updated successfully.');
-
-        // Refresh the attendance records
         $this->loadAttendanceRecords();
 
         $this->showEditModal = false; // Close the modal
