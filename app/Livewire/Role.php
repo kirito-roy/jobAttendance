@@ -14,6 +14,8 @@ class Role extends Component
     public $selectedRole = [];
     public $selectedDep = [];
     public $users = [];
+    public $search = '';
+
     public $newUser = [
         'name' => '',
         'email' => '',

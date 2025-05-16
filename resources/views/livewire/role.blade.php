@@ -184,6 +184,43 @@
     </div>
 
     <script>
+        const users = @json($users);
+
+        function searchUser() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase().trim();
+
+            if (!searchInput) return;
+
+            // Clear previous highlights
+            document.querySelectorAll("[id^='user-id-']").forEach(row => {
+                row.style.backgroundColor = "";
+            });
+
+            const matchedUsers = users.filter(user =>
+                (user.name && user.name.toLowerCase().includes(searchInput))
+            );
+
+            if (matchedUsers.length > 0) {
+                matchedUsers.forEach(user => {
+                    const row = document.getElementById(`user-id-${user.id}`);
+                    if (row) {
+                        row.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+                        row.style.backgroundColor = "#ffffcc";
+                        setTimeout(() => {
+                            row.style.transition = "background-color 0.5s ease";
+                            row.style.backgroundColor = "";
+                        }, 2000);
+                    }
+                });
+            } else {
+                alert("No matching user found.");
+            }
+        }
+
+
         function openCreateUserModal() {
             document.getElementById('createUserModal').classList.remove('hidden');
         }
