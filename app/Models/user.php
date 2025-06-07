@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\role;
 
-class User extends Authenticatable
+class user extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -17,19 +18,22 @@ class User extends Authenticatable
         'phone',
         'address',
         'dep',
+    ];
+
+    protected $hidden = [
+        'password',
         'remember_token',
     ];
-    protected $hidden = [
-        'password', // Hide the password when serializing
-        'remember_token', // Optionally hide the remember token
-    ];
 
-    // Specify attributes that should not be mass assignable
-    protected $guarded = ['passeord']; // Corrected typo from 'passeord' to 'password'
+    // Relationships
 
-    // User.php
     public function schedule()
     {
         return $this->hasOne(Schedule::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'userhasroles');
     }
 }

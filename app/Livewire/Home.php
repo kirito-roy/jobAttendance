@@ -6,7 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use DateTime;
 use App\Models\Schedule;
-use App\Models\AttendanceRecord; // Import the AttendanceRecord model
+use App\Models\AttendanceRecord;
 
 class Home extends Component
 {
@@ -16,18 +16,15 @@ class Home extends Component
 
     public function getattendance()
     {
-        $userId = Auth::user()->id;
+        $userId = Auth::id();
 
-        // Calculate the start and end of the current week
         $today = new DateTime();
-        if ($today->format('N') == 1) { // If today is Monday
-            $startOfWeek = $today->format('Y-m-d');
-        } else {
-            $startOfWeek = $today->modify('last monday')->format('Y-m-d');
-        }
+        $startOfWeek = ($today->format('N') == 1)
+            ? $today->format('Y-m-d')
+            : $today->modify('last monday')->format('Y-m-d');
+
         $endOfWeek = (clone $today)->modify('sunday')->format('Y-m-d');
 
-        // Fetch attendance records for the current week
         $this->weeklyAttendance = AttendanceRecord::where('user_id', $userId)
             ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->orderBy('created_at')
@@ -35,41 +32,34 @@ class Home extends Component
             ->toArray();
     }
 
-    /**
-     * Calculate the start of the week and fetch the user's weekly schedule
-     */
     public function findSchedule()
     {
         $today = new DateTime();
+        $this->startOfWeek = ($today->format('N') == 1)
+            ? $today->format('Y-m-d')
+            : $today->modify('last monday')->format('Y-m-d');
 
-        // Calculate start of the week
-        if ($today->format('N') == 1) { // If today is Monday
-            $this->startOfWeek = $today->format('Y-m-d');
-        } else {
-            $this->startOfWeek = $today->modify('last monday')->format('Y-m-d');
-        }
-
-        // Fetch the user's schedule for the current week
-        $this->schedule = Schedule::where('user_id', Auth::user()->id)
+        $this->schedule = Schedule::where('user_id', Auth::id())
             ->where('startOfWeek', $this->startOfWeek)
-            ->first(); // Get a single record
+            ->first();
     }
 
-    /**
-     * Mount function is executed when the Livewire component is initialized
-     */
     public function mount()
     {
         if (!Auth::check()) {
             return redirect('/login');
         }
 
-        if (Auth::user()->role === 'admin') {
+        $user = Auth::user();
+        $roleNames = $user->roles->pluck('role')->toArray(); // ['admin', 'manager', ...]
+
+        if (in_array('admin', $roleNames)) {
             return redirect('/admin');
-        } else if (Auth::user()->role === 'manager') {
+        } elseif (in_array('manager', $roleNames)) {
             return redirect('/manager');
         }
 
+        // If not admin or manager, continue
         $this->findSchedule();
         $this->getattendance();
     }

@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Models\Role;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class Role extends Component
+class Roles extends Component
 {
-    public $roles = ['user', 'manager', 'admin'];
+    public $roles = [];
     public $deps = ['Hr', 'It', 'Finance'];
     public $selectedRole = [];
     public $selectedDep = [];
@@ -20,38 +21,51 @@ class Role extends Component
         'name' => '',
         'email' => '',
         'password' => '',
-        'role' => '',
-        'dep' => '',
+
     ];
 
     public function mount()
     {
-        $this->loadUsers(); // Load all users initially
+        $this->loadRoles();
+        $this->loadUsers();
+    }
+
+
+    public function loadRoles()
+    {
+        $this->roles = Role::pluck('role')->toArray();
     }
 
     private function loadUsers()
     {
-        $this->users = User::all();
+        $this->users = User::with('roles')->get();
+
         foreach ($this->users as $user) {
-            $this->selectedRole[$user->id] = $user->role;
             $this->selectedDep[$user->id] = $user->dep;
+            $this->selectedRole[$user->id] = $user->roles->pluck('role')->toArray(); // multiple roles
         }
     }
 
     public function submit_role($userId)
     {
         $this->validate([
-            "selectedRole.$userId" => 'required|in:' . implode(',', $this->roles),
+            "selectedRole.$userId" => 'required|array',
+            "selectedRole.$userId.*" => 'in:' . implode(',', $this->roles),
             "selectedDep.$userId" => 'required|in:' . implode(',', $this->deps),
         ]);
 
         $user = User::find($userId);
         if ($user) {
-            $user->role = $this->selectedRole[$userId] ?? $user->role;
-            $user->dep = $this->selectedDep[$userId] ?? $user->dep;
+            // Update department
+            $user->dep = $this->selectedDep[$userId];
             $user->save();
+
+            // Sync roles
+            $roleIds = Role::whereIn('role', $this->selectedRole[$userId])->pluck('id')->toArray();
+            $user->roles()->sync($roleIds);
+
             $this->loadUsers();
-            session()->flash('message', "Role and department for {$user->name} updated successfully!");
+            session()->flash('message', "Role(s) and department for {$user->name} updated successfully!");
         } else {
             session()->flash('error', 'User not found.');
         }
@@ -59,13 +73,14 @@ class Role extends Component
 
     public function delete($id)
     {
-        if (Auth::check() && Auth::user()->role == 'admin') {
+        $currentUser = Auth::user();
+
+        if ($currentUser && $currentUser->roles->pluck('role')->contains('admin')) {
             $user = User::find($id);
             if ($user) {
+                $user->roles()->detach();
                 $user->delete();
-
                 $this->loadUsers();
-
                 session()->flash('message', "{$user->name} has been deleted successfully.");
             } else {
                 session()->flash('error', "User not found.");
@@ -81,28 +96,25 @@ class Role extends Component
             'newUser.name' => 'required|string|max:255',
             'newUser.email' => 'required|email|unique:users,email',
             'newUser.password' => 'required|string|min:8',
-            'newUser.role' => 'required|in:' . implode(',', $this->roles),
-            'newUser.dep' => 'required|in:' . implode(',', $this->deps),
         ]);
 
         $user = User::create([
             'name' => $this->newUser['name'],
             'email' => $this->newUser['email'],
             'password' => Hash::make($this->newUser['password']),
-            'role' => $this->newUser['role'],
-            'dep' => $this->newUser['dep'],
         ]);
 
+        // Attach role
+
+        // Reset form
         $this->newUser = [
             'name' => '',
             'email' => '',
             'password' => '',
-            'role' => '',
-            'dep' => '',
+
         ];
 
         $this->loadUsers();
-
         session()->flash('message', "{$user->name} has been added successfully as a new user.");
     }
 

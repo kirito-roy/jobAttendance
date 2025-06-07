@@ -2,44 +2,53 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use App\Models\user;
+use App\Models\role;
 
-class UserSeeder extends Seeder
+class userSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        user::create([
-            'name' => 'Admin User', // Replace with the desired admin name
-            'email' => 'sumit.de08765431@gmail.com', // Admin email
-            'password' => bcrypt('123456789'), // Admin password (hashed)
-            'role' => 'admin', // Admin role
-            'phone' => null, // Set to null if not provided
-            'address' => null, // Set to null if not provided
-            'dep' => null, // Set to null if not provided
+        // Create roles
+        $adminrole = role::create(['role' => 'admin']);
+        $managerrole = role::create(['role' => 'manager']);
+        $userrole = role::create(['role' => 'user']);
+        // $developerrole = role::create(['role' => 'developer']);
+
+        // Create users
+        $admin = user::create([
+            'name' => 'Admin user',
+            'email' => 'sumit.de08765431@gmail.com',
+            'password' => bcrypt('123456789'),
+            'phone' => null,
+            'address' => null,
+            'dep' => null,
         ]);
-        user::create([
-            'name' => 'manager', // Replace with the desired admin name
-            'email' => 'roy184433@gmail.com', // Admin email
-            'password' => bcrypt('123456789'), // Admin password (hashed)
-            'role' => 'manager', // Admin role
-            'phone' => null, // Set to null if not provided
-            'address' => null, // Set to null if not provided
-            'dep' => null, // Set to null if not provided
+
+        $manager = user::create([
+            'name' => 'Manager',
+            'email' => 'roy184433@gmail.com',
+            'password' => bcrypt('123456789'),
+            'phone' => null,
+            'address' => null,
+            'dep' => null,
         ]);
-        user::create([
-            'name' => 'sumit', // Replace with the desired admin name
-            'email' => 'sumit@gmail.com', // Admin email
-            'password' => bcrypt('123456789'), // Admin password (hashed)
-            'role' => 'user', // Admin role
-            'phone' => null, // Set to null if not provided
-            'address' => null, // Set to null if not provided
-            'dep' => 'It', // Set to null if not provided
+
+        $user = user::create([
+            'name' => 'Sumit',
+            'email' => 'sumit@gmail.com',
+            'password' => bcrypt('123456789'),
+            'phone' => null,
+            'address' => null,
+            'dep' => 'IT',
         ]);
+
+        // Attach roles to users (many-to-many)
+        $admin->roles()->attach($adminrole->id);
+        $manager->roles()->attach($managerrole->id);
+        $user->roles()->attach($userrole->id);
+        $admin->roles()->attach($managerrole->id);
+        $admin->roles()->attach($userrole->id);
     }
 }

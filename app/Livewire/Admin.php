@@ -5,8 +5,10 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\AttendanceRecord;
+use App\Models\Role;
 use App\Models\Schedule;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Admin extends Component
@@ -16,20 +18,27 @@ class Admin extends Component
     public $monthlySummary = [];
     public $detailedAttendance = [];
     public $unScheduled = 0;
+    public $users = [];
 
     public function mount()
     {
-        // Calculate attendance summaries
+        $this->users = $this->fetchUsersWithRole('user');
+
         $this->detailedAttendance = $this->fetchWeeklyDetailedAttendance();
-        $this->dailySummary = $this->calculateDailySummary($this->detailedAttendance);
+        $this->dailySummary = $this->calculateDailySummary();
         $this->weeklySummary = $this->calculateWeeklySummary();
         $this->monthlySummary = $this->calculateMonthlySummary();
 
-        // Fetch detailed attendance for the current week
         $this->hasSchedule();
     }
 
-    private function calculateDailySummary($dataw)
+    private function fetchUsersWithRole(string $roleName): Collection
+    {
+        $role = Role::where('role', $roleName)->first();
+        return $role ? $role->users : collect(); // assuming roles() in Role model
+    }
+
+    private function calculateDailySummary()
     {
         $today = Carbon::now()->format('Y-m-d');
         return $this->calculateSummary($this->getAttendanceWithScheduleLogic([$today]));
@@ -37,31 +46,37 @@ class Admin extends Component
 
     private function calculateWeeklySummary()
     {
-        $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
-        $endOfWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
-        $dates = Carbon::parse($startOfWeek)->toPeriod($endOfWeek);
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $dates = $this->generateDateRange($startOfWeek, $endOfWeek);
 
         return $this->calculateSummary($this->getAttendanceWithScheduleLogic($dates));
     }
 
     private function calculateMonthlySummary()
     {
-        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
-        $dates = Carbon::parse($startOfMonth)->toPeriod($endOfMonth);
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $dates = $this->generateDateRange($startOfMonth, $endOfMonth);
 
         return $this->calculateSummary($this->getAttendanceWithScheduleLogic($dates));
     }
 
-    private function getAttendanceWithScheduleLogic($dates)
+    private function generateDateRange($start, $end): array
     {
-        $users = User::where('role', 'user')->get();
+        $dates = [];
+        for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
+            $dates[] = $date->format('Y-m-d');
+        }
+        return $dates;
+    }
+
+    private function getAttendanceWithScheduleLogic(array $dates)
+    {
         $attendanceData = [];
 
-        foreach ($users as $user) {
+        foreach ($this->users as $user) {
             foreach ($dates as $date) {
-                $date = Carbon::parse($date)->format('Y-m-d');
-
                 $schedule = Schedule::where('user_id', $user->id)
                     ->where('startOfWeek', '<=', $date)
                     ->where('endOfWeek', '>=', $date)
@@ -74,24 +89,18 @@ class Admin extends Component
                     ->first();
 
                 if (!$scheduledTime) {
-                    $attendanceData[] = [
-                        'user_id' => $user->id,
-                        'date' => $date,
-                        'status' => 'Not Scheduled',
-                    ];
-                } elseif (!$attendance || Carbon::parse($attendance->check_in)->greaterThan(Carbon::parse($scheduledTime))) {
-                    $attendanceData[] = [
-                        'user_id' => $user->id,
-                        'date' => $date,
-                        'status' => 'Absent',
-                    ];
+                    $status = 'Not Scheduled';
+                } elseif (!$attendance || Carbon::parse($attendance->check_in)->gt(Carbon::parse($scheduledTime))) {
+                    $status = 'Absent';
                 } else {
-                    $attendanceData[] = [
-                        'user_id' => $user->id,
-                        'date' => $date,
-                        'status' => 'Present',
-                    ];
+                    $status = 'Present';
                 }
+
+                $attendanceData[] = [
+                    'user_id' => $user->id,
+                    'date' => $date,
+                    'status' => $status,
+                ];
             }
         }
 
@@ -100,9 +109,9 @@ class Admin extends Component
 
     private function fetchWeeklyDetailedAttendance()
     {
-        $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
-        $endOfWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
-        $dates = Carbon::parse($startOfWeek)->toPeriod($endOfWeek);
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $dates = $this->generateDateRange($startOfWeek, $endOfWeek);
 
         return $this->getAttendanceWithScheduleLogic($dates)
             ->groupBy('date')
@@ -133,25 +142,28 @@ class Admin extends Component
             'absent' => $total > 0 ? round(($absent / $total) * 100, 2) : 0,
         ];
     }
+
     private function hasSchedule()
     {
         $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
-        $idlist = User::where('role', 'user')->pluck('id');
 
-        foreach ($idlist as $id) {
-            $data = Schedule::where('user_id', $id)->where('startOfWeek', $startOfWeek)->get()->toArray();
-            if ($data == null) {
+        foreach ($this->users as $user) {
+            $hasSchedule = Schedule::where('user_id', $user->id)
+                ->where('startOfWeek', $startOfWeek)
+                ->exists();
+
+            if (!$hasSchedule) {
                 $this->unScheduled += 1;
             }
         }
     }
+
     public function exportReport()
     {
         $filename = 'attendance_report_' . Carbon::now()->format('Ymd_His') . '.csv';
 
         return new StreamedResponse(function () {
             $file = fopen('php://output', 'w');
-
             fputcsv($file, ['Date', 'Total', 'Present (%)', 'Absent (%)']);
 
             foreach ($this->detailedAttendance as $record) {

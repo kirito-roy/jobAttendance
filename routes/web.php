@@ -13,6 +13,7 @@ use Termwind\Components\Li;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Livewire\Role;
+use App\Livewire\Roles;
 
 // Middleware configuration for role-based access
 Route::aliasMiddleware('role', \App\Http\Middleware\RoleMiddleware::class);
@@ -45,8 +46,10 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/admin', Admin::class);
-        Route::get('/role', Role::class);
         Route::get('/schedule', Livewire\Schedule::class);
+
+        Route::get('/role', Roles::class);
+        Route::get('/manageuser/{id}', Livewire\Manageuser::class);
     });
 
     // Routes for admin only

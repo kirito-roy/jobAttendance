@@ -14,6 +14,7 @@ class Profile extends Component
     public function mount()
     {
         $this->user =   Auth::user()->toArray();
+        echo (json_encode($this->user));
     }
     public function submit_profile()
     {

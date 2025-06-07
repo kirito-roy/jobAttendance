@@ -26,27 +26,25 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $request->authenticate();
-        // $a = user::query();
-        // $request = $a->where('email', $request->email)->first();
+        $request->session()->regenerate();
 
-        if (Auth::user()->role == 'admin') {
-            $request->session()->regenerate();
+        $user = Auth::user();
+        $roleNames = $user->roles->pluck('role'); // ['admin', 'user', 'manager']
+
+        if ($roleNames->contains('admin')) {
             return redirect('/admin');
-        } else if (Auth::user()->role == 'user' && Auth::user()->dep != null) {
-            $request->session()->regenerate();
-
-            return redirect("/");
-        } else if (Auth::user()->role == 'manager') {
-            $request->session()->regenerate();
-
+        } elseif ($roleNames->contains('manager')) {
             return redirect('/manager');
+        } elseif ($roleNames->contains('user') && $user->dep !== null) {
+            return redirect('/');
         } else {
-            echo "account not apptoved, Admin must chose an depertment for you.";
+            Auth::logout(); // Optionally log them out
+            return redirect('/login')->withErrors([
+                'message' => 'Account not approved. Admin must assign a department to you.',
+            ]);
         }
-
-        // Default return statement
-        // return redirect('/login');
     }
+
 
     /**
      * Destroy an authenticated session.
