@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\role;
 use App\Models\User;
+use Exception;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +16,13 @@ class Profile extends Component
     public function mount()
     {
         $this->user =   Auth::user()->toArray();
-        echo (json_encode($this->user));
+        try {
+            $this->user['role'] = Auth::user()->roles()->pluck('role')->toArray();
+            // echo (json_encode($this->user));
+        } catch (Exception $e) {
+        }
+
+        // echo (json_encode($this->user));
     }
     public function submit_profile()
     {

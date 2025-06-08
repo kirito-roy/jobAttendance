@@ -28,7 +28,9 @@ class Schedule extends Component
         $this->allUsers = User::with(['schedule' => function ($query) {
             $query->where('startOfWeek', $this->startOfWeek);
         }])
-            ->where('role', 'user')
+            ->whereHas('roles', function ($query) {
+                $query->where('role', 'user'); // Filter by the 'role' column in the 'roles' table
+            })
             ->get();
 
         $this->users = $this->allUsers;

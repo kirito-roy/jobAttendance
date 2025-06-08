@@ -53,11 +53,11 @@ class Home extends Component
         $user = Auth::user();
         $roleNames = $user->roles->pluck('role')->toArray(); // ['admin', 'manager', ...]
 
-        if (in_array('admin', $roleNames)) {
-            return redirect('/admin');
-        } elseif (in_array('manager', $roleNames)) {
-            return redirect('/manager');
-        }
+        // if (in_array('admin', $roleNames)) {
+        //     return redirect('/admin');
+        // } elseif (in_array('manager', $roleNames)) {
+        //     return redirect('/manager');
+        // }
 
         // If not admin or manager, continue
         $this->findSchedule();

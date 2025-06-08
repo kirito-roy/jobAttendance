@@ -85,7 +85,9 @@ class ManagerPanel extends Component
 
     private function getAttendanceWithScheduleLogic($dates)
     {
-        $users = User::where('role', 'user')->get();
+        $users = User::whereHas('roles', function ($query) {
+            $query->where('role', 'user');
+        })->get();
         $attendanceData = [];
 
         foreach ($users as $user) {
@@ -166,7 +168,9 @@ class ManagerPanel extends Component
     private function hasSchedule()
     {
         $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
-        $idlist = User::where('role', 'user')->pluck('id');
+        $idlist = User::whereHas('roles', function ($query) {
+            $query->where('role', 'user');
+        })->pluck('id');
 
         foreach ($idlist as $id) {
             $data = Schedule::where('user_id', $id)->where('startOfWeek', $startOfWeek)->get()->toArray();

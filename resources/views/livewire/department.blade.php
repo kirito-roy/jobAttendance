@@ -1,5 +1,5 @@
 <div>
-    <x-slot:heading>Roles</x-slot:heading>
+    <x-slot:heading>Department Management</x-slot:heading>
 
     <div class="flex items-center justify-center h-full">
         <div class="w-full h-full p-8 space-y-6 overflow-auto bg-white rounded-lg shadow-md dark:bg-gray-800">

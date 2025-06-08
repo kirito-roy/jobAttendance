@@ -2,15 +2,19 @@
 
 namespace App\Livewire;
 
-use App\Models\Role;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Role;
 
-class Roles extends Component
+
+class Department extends Component
 {
     public $roles = [];
+    public $deps = ['Hr', 'It', 'Finance'];
+    public $selectedRole = [];
+    public $selectedDep = [];
     public $users = [];
     public $search = '';
 
@@ -43,30 +47,30 @@ class Roles extends Component
         }
     }
 
-    // public function submit_role($userId)
-    // {
-    //     $this->validate([
-    //         "selectedRole.$userId" => 'required|array',
-    //         "selectedRole.$userId.*" => 'in:' . implode(',', $this->roles),
-    //         "selectedDep.$userId" => 'required|in:' . implode(',', $this->deps),
-    //     ]);
+    public function submit_role($userId)
+    {
+        $this->validate([
+            "selectedRole.$userId" => 'required|array',
+            "selectedRole.$userId.*" => 'in:' . implode(',', $this->roles),
+            "selectedDep.$userId" => 'required|in:' . implode(',', $this->deps),
+        ]);
 
-    //     $user = User::find($userId);
-    //     if ($user) {
-    //         // Update department
-    //         $user->dep = $this->selectedDep[$userId];
-    //         $user->save();
+        $user = User::find($userId);
+        if ($user) {
+            // Update department
+            $user->dep = $this->selectedDep[$userId];
+            $user->save();
 
-    //         // Sync roles
-    //         $roleIds = Role::whereIn('role', $this->selectedRole[$userId])->pluck('id')->toArray();
-    //         $user->roles()->sync($roleIds);
+            // Sync roles
+            $roleIds = Role::whereIn('role', $this->selectedRole[$userId])->pluck('id')->toArray();
+            $user->roles()->sync($roleIds);
 
-    //         $this->loadUsers();
-    //         session()->flash('message', "Role(s) and department for {$user->name} updated successfully!");
-    //     } else {
-    //         session()->flash('error', 'User not found.');
-    //     }
-    // }
+            $this->loadUsers();
+            session()->flash('message', "Role(s) and department for {$user->name} updated successfully!");
+        } else {
+            session()->flash('error', 'User not found.');
+        }
+    }
 
     public function delete($id)
     {
@@ -117,6 +121,6 @@ class Roles extends Component
 
     public function render()
     {
-        return view('livewire.role', ['users' => $this->users]);
+        return view('livewire.department');
     }
 }

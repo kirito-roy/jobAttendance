@@ -33,7 +33,9 @@ class CheckInOut extends Component
 
     public function loadAttendanceRecords()
     {
-        $users = User::where('role', 'user')->get();
+        $users = User::whereHas('roles', function ($query) {
+            $query->where('role', 'user');
+        })->get();
 
         $attendanceRecords = AttendanceRecord::whereDate('date', $this->date) // Filter by the specific date
             ->get()
