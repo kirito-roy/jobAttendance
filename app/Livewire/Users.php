@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class Roles extends Component
+class Users extends Component
 {
     public $roles = [];
     public $users = [];
@@ -42,9 +42,13 @@ class Roles extends Component
 
         foreach ($this->users as $user) {
             $this->selectedDep[$user->id] = $user->dep;
-            $this->selectedRole[$user->id] = $user->roles->pluck('role')->toArray(); // multiple roles
+
+            // Collect the 'role' field from each related Role model
+            $this->selectedRole[$user->id] = $user->roles->pluck('role')->toArray();
         }
+        echo (json_encode($this->selectedRole[1]));
     }
+
 
     // public function submit_role($userId)
     // {
@@ -120,6 +124,6 @@ class Roles extends Component
 
     public function render()
     {
-        return view('livewire.role', ['users' => $this->users]);
+        return view('livewire.users');
     }
 }

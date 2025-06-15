@@ -5,8 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if (isset($heading) && !empty($heading))
+        <title>{{ strtoupper($heading) }}</title>
+    @else
+        <title>NIC</title>
+    @endif
 
-    <title>{{ strtoupper($heading) }}</title>
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -28,7 +33,7 @@
                     <!-- Left Logo + Nav -->
                     <div class="flex items-center">
                         <img class="h-8 shrink-0"
-                            src="https://www.presentations.gov.in/wp-content/uploads/2020/06/ICONIC_SQUARE_NIC_Logo_blue-01.png"
+                            src="{{ Vite::asset('resources/images/ICONIC_SQUARE_NIC_Logo_blue-01.png') }}"
                             alt="Logo">
 
                         <!-- Desktop Navigation -->
@@ -47,6 +52,8 @@
                                     <x-navigate href="/admin">Admin Panel</x-navigate>
                                     <x-navigate href="/role">Roles</x-navigate>
                                     <x-navigate href="/schedule">Schedule</x-navigate>
+                                    <x-navigate href="/department">Department</x-navigate>
+                                    <x-navigate href="/users">Users </x-navigate>
                                 @endif
 
                                 @if (in_array('manager', $roles))
@@ -122,6 +129,9 @@
                         <x-navigate href="/admin">Admin Panel</x-navigate>
                         <x-navigate href="/role">Roles</x-navigate>
                         <x-navigate href="/schedule">Schedule</x-navigate>
+                        <x-navigate href="/department">Department</x-navigate>
+
+                        <x-navigate href="/users">Users</x-navigate>
                     @endif
 
                     @if (in_array('manager', $roles))

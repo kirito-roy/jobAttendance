@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Livewire\Role;
 use App\Livewire\Roles;
 use App\Livewire\Department;
+use App\Livewire\Users;
 
 // Middleware configuration for role-based access
 Route::aliasMiddleware('role', \App\Http\Middleware\RoleMiddleware::class);
@@ -52,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/role', Roles::class);
         Route::get('/manageuser/{id}', Livewire\Manageuser::class);
         Route::get('/department', Department::class);
+        Route::get('/users', Users::class);
     });
 
     // Routes for admin only

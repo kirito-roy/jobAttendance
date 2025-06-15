@@ -1,4 +1,5 @@
 <div>
+    {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
     <x-slot:heading>Roles</x-slot:heading>
 
     <div class="flex items-center justify-center h-full">
@@ -76,15 +77,13 @@
                                 <span class="font-semibold">Name:</span> {{ $user->name }}
                             </div>
                             <div class="mb-2">
-                                <span class="font-semibold">Email:</span> {{ $user->email ?? 'No role assigned' }}
+                                <span class="font-semibold">Role:</span>
+                                {{ json_encode($selectedRole[$user->id]) ?? 'No role assigned' }}
+                            </div>
+                            <div class="mb-2">
+                                <span class="font-semibold">Department:</span> {{ $user->dep ?? 'No dep assigned' }}
                             </div>
 
-                            <div class="mb-2">
-                                <button onclick="window.location.href='{{ url('/manageuser/' . $user->id) }}'"
-                                    class="w-full px-4 py-2 mt-2 text-sm font-semibold text-white transition duration-150 bg-indigo-600 rounded-md hover:bg-indigo-700">
-                                    Manage
-                                </button>
-                            </div>
                             <div>
                                 <button onclick="confirmDelete({{ $user->id }})"
                                     class="w-full px-4 py-2 mt-2 text-sm font-semibold text-white transition duration-150 bg-red-600 rounded-md hover:bg-red-700">
@@ -181,4 +180,5 @@
             }
         }
     </script>
+
 </div>
